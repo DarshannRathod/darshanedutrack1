@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>Student Login | EduTrack Education Solution</title>
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<!-- EmailJS -->
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.auth-page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+
+/* LEFT */
+.auth-left{
+  background:linear-gradient(105deg,rgba(42,10,8,.90) 0%,rgba(42,10,8,.78) 45%,rgba(42,10,8,.50) 100%),
+    url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=85') center 30%/cover no-repeat;
+  display:flex;flex-direction:column;justify-content:space-between;padding:48px;
+}
+.auth-left .logo img{height:60px}
+.auth-left h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:14px}
+.auth-left h2 em{color:#FFC107;font-style:normal}
+.auth-left p{color:rgba(255,255,255,.72);font-size:15px;line-height:1.75;margin-bottom:24px}
+.auth-feat{display:flex;align-items:center;gap:12px;margin-bottom:12px;color:rgba(255,255,255,.82);font-size:14px}
+.auth-feat-icon{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.auth-left-footer{color:rgba(255,255,255,.3);font-size:12px;margin-top:24px}
+
+/* RIGHT */
+.auth-right{display:flex;align-items:center;justify-content:center;padding:48px 40px;overflow-y:auto;background:var(--white)}
+.auth-box{width:100%;max-width:460px}
+
+/* TABS */
+.auth-tabs{display:flex;gap:0;border-radius:var(--r-md);overflow:hidden;border:2px solid var(--border);margin-bottom:28px}
+.auth-tab{flex:1;padding:12px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text-lt);background:var(--white);cursor:pointer;border:none;transition:all .2s}
+.auth-tab.active{background:linear-gradient(135deg,var(--violet),var(--teal));color:#fff}
+
+/* PANELS */
+.auth-panel{display:none}
+.auth-panel.active{display:block}
+.auth-step{display:none}
+.auth-step.active{display:block}
+
+/* STEP DOTS */
+.step-dots{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:all .25s}
+.step-dot.active{background:var(--violet);transform:scale(1.3)}
+.step-dot.done{background:var(--teal)}
+
+/* OTP INPUT */
+.otp-grid{display:flex;gap:8px;justify-content:center;margin:16px 0 20px}
+.otp-grid input{width:48px;height:52px;border-radius:var(--r-sm);border:2px solid var(--border);text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:900;outline:none;transition:all .2s;color:var(--text);background:var(--white)}
+.otp-grid input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(212,32,38,.1)}
+.otp-grid input.filled{border-color:var(--teal);background:var(--teal-pale)}
+
+/* MESSAGES */
+.err-msg{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:var(--r-sm);padding:11px 14px;font-size:13px;color:#B91C1C;margin-bottom:14px;display:none;align-items:center;gap:8px}
+.err-msg.show{display:flex}
+.otp-notice{background:linear-gradient(135deg,var(--teal-pale),var(--violet-pale));border:1.5px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;font-size:13px;color:var(--text-mid);margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.otp-timer{font-size:12px;color:var(--text-lt);text-align:center;margin-top:8px}
+.otp-timer span{color:var(--violet);font-weight:700}
+
+/* FIELDS */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:800;color:var(--text-mid);margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px}
+.field input,.field select{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--r-md);font-size:14px;color:var(--text);background:var(--white);outline:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+.field input:focus,.field select:focus{border-color:var(--violet);box-shadow:0 0 0 4px rgba(212,32,38,.08)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* BTN LOADING */
+.btn-spin{pointer-events:none;opacity:.8}
+.btn-spin::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* DIVIDER */
+.divider-text{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-xlt);margin:14px 0}
+.divider-text::before,.divider-text::after{content:'';flex:1;height:1px;background:var(--border)}
+
+@media(max-width:768px){
+  .auth-page{grid-template-columns:1fr}
+  .auth-left{display:none}
+  .auth-right{padding:32px 20px;min-height:100vh}
+}
+</style>
+</head>
+<body>
+<div class="auth-page">
+
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <a href="index.html" class="logo"><img src="edutrack-logo.jpg" alt="EduTrack Education Solution"></a>
+    <div>
+      <h2>Your <em>NEET counselling</em><br>journey starts here.</h2>
+      <p>Login to access personalised college predictions, verified fee data, and your counsellor's choice list — all in one place.</p>
+      <div class="auth-feat"><div class="auth-feat-icon">🔮</div> Personalised College Predictor</div>
+      <div class="auth-feat"><div class="auth-feat-icon">🏛️</div> 672+ colleges with fee data</div>
+      <div class="auth-feat"><div class="auth-feat-icon">☑️</div> Save colleges &amp; share with counsellor</div>
+      <div class="auth-feat"><div class="auth-feat-icon">📋</div> Receive your personalised choice list</div>
+      <div class="auth-feat"><div class="auth-feat-icon">📧</div> OTP verified — secure &amp; private</div>
+    </div>
+    <div class="auth-left-footer">© 2026 EduTrack Education Solution, Nagpur</div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-right">
+    <div class="auth-box">
+      <div style="text-align:center;margin-bottom:24px">
+        <img src="edutrack-logo.jpg" alt="EduTrack" style="height:52px;margin:0 auto 10px;display:block">
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:900;color:var(--text);margin-bottom:4px">Student Portal</h3>
+        <p style="font-size:13px;color:var(--text-lt)">Access your personalised counselling dashboard</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab"        onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- ════ LOGIN PANEL ════ -->
+      <div class="auth-panel active" id="panLogin">
+        <div class="err-msg" id="loginErr"><span>⚠️</span><span id="loginErrTxt"></span></div>
+
+        <!-- Step 1: Email + Mobile -->
+        <div class="auth-step active" id="loginS1">
+          <div class="field">
+            <label>Email Address *</label>
+            <input type="email" id="lEmail" placeholder="your@email.com" autocomplete="email">
+          </div>
+          <div class="field">
+            <label>Registered Mobile Number *</label>
+            <input type="tel" id="lMobile" placeholder="10-digit mobile number" maxlength="10" onkeydown="if(event.key==='Enter')loginStep1()">
+          </div>
+          <button class="btn btn-primary" id="lSendBtn" style="width:100%;justify-content:center;padding:14px;font-size:15px" onclick="loginStep1()">
+            Send OTP to Email →
+          </button>
+          <div class="divider-text">or</div>
+          <p style="text-align:center;font-size:13px;color:var(--text-lt)">New here? <a href="#" onclick="switchTab('register')" style="color:var(--violet);font-weight:700">Register free →</a></p>
+          <p style="text-align:center;margin-top:20px;font-size:12px"><a href="index.html" style="color:var(--text-xlt)">← Back to website</a></p>
+        </div>
+
+        <!-- Step 2: OTP -->
+        <div class="auth-step" id="loginS2">
+          <div class="otp-notice">
+            <span style="font-size:20px;flex-shrink:0">📧</span>
+            <div>
+              A 6-digit OTP has been sent to <strong id="lEmailPreview"></strong>.<br>
+              <span style="font-size:12px;color:var(--text-lt)">Check inbox &amp; spam. Valid 10 minutes.</span>
+            </div>
+          </div>
+          <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">Enter OTP:</p>
+          <div class="otp-grid" id="loginOtpGrid">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,0,'lotp')">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,1,'lotp')">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,2,'lotp')">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,3,'lotp')">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,4,'lotp')">
+            <input type="text" maxlength="1" class="lotp" onkeyup="otpNav(this,5,'lotp')">
+          </div>
+          <button class="btn btn-primary" id="lVerifyBtn" style="width:100%;justify-content:center;padding:14px" onclick="loginStep2()">✅ Verify &amp; Login</button>
+          <div class="otp-timer" id="lTimer">Resend in <span id="lTimerCount">120</span>s</div>
+          <p style="text-align:center;margin-top:10px;font-size:12px">
+            <a href="#" id="lResend" style="color:var(--text-xlt);pointer-events:none" onclick="loginResend()">Resend OTP</a>
+            &nbsp;·&nbsp;<a href="#" onclick="loginGoBack()" style="color:var(--text-lt)">← Change details</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- ════ REGISTER PANEL ════ -->
+      <div class="auth-panel" id="panRegister">
+        <div class="step-dots">
+          <div class="step-dot active" id="rdot0"></div>
+          <div class="step-dot" id="rdot1"></div>
+          <div class="step-dot" id="rdot2"></div>
+        </div>
+        <div class="err-msg" id="regErr"><span>⚠️</span><span id="regErrTxt"></span></div>
+
+        <!-- Step 1: Personal -->
+        <div class="auth-step active" id="regS1">
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">Create Account</p>
+          <p style="font-size:13px;color:var(--text-lt);margin-bottom:20px">Step 1 of 3 — Your contact details</p>
+          <div class="field">
+            <label>Full Name *</label>
+            <input type="text" id="rName" placeholder="e.g. Rahul Sharma" autocomplete="name">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Email *</label>
+              <input type="email" id="rEmail" placeholder="your@email.com">
+            </div>
+            <div class="field">
+              <label>Mobile *</label>
+              <input type="tel" id="rMobile" placeholder="10-digit" maxlength="10">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>City</label>
+              <input type="text" id="rCity" placeholder="e.g. Nagpur">
+            </div>
+            <div class="field">
+              <label>State</label>
+              <select id="rState">
+                <option value="">Select</option>
+                <option>Maharashtra</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option>
+                <option>Rajasthan</option><option>Karnataka</option><option>Gujarat</option>
+                <option>Tamil Nadu</option><option>Andhra Pradesh</option><option>Telangana</option>
+                <option>Bihar</option><option>West Bengal</option><option>Kerala</option>
+                <option>Punjab</option><option>Haryana</option><option>Jharkhand</option>
+                <option>Chhattisgarh</option><option>Himachal Pradesh</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px" onclick="regStep1()">Next: NEET Details →</button>
+          <p style="text-align:center;margin-top:14px;font-size:13px;color:var(--text-lt)">Have an account? <a href="#" onclick="switchTab('login')" style="color:var(--violet);font-weight:700">Login →</a></p>
+        </div>
+
+        <!-- Step 2: NEET -->
+        <div class="auth-step" id="regS2">
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">NEET Details</p>
+          <p style="font-size:13px;color:var(--text-lt);margin-bottom:20px">Step 2 of 3 — Your exam information</p>
+          <div class="field-row">
+            <div class="field">
+              <label>Course Looking For *</label>
+              <select id="rCourse">
+                <option value="">Select</option>
+                <option value="MBBS">MBBS (UG)</option>
+                <option value="BDS">BDS (UG)</option>
+                <option value="BAMS">BAMS / AYUSH (UG)</option>
+                <option value="MD/MS">MD / MS (PG)</option>
+                <option value="DNB">DNB (PG)</option>
+                <option value="MDS">MDS (PG Dental)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Exam Year</label>
+              <select id="rYear">
+                <option value="2026">NEET 2026</option>
+                <option value="2025">NEET 2025</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>NEET Score (/ 720)</label>
+              <input type="number" id="rScore" placeholder="e.g. 520" min="0" max="720">
+            </div>
+            <div class="field">
+              <label>All India Rank (AIR)</label>
+              <input type="number" id="rAIR" placeholder="e.g. 45000">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Category</label>
+              <select id="rCat">
+                <option value="General">General / EWS</option>
+                <option value="OBC">OBC</option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+                <option value="PH">PH / PWD</option>
+                <option value="NRI">NRI</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Domicile State</label>
+              <select id="rDomicile">
+                <option value="">Same as City State</option>
+                <option>Maharashtra</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option>
+                <option>Rajasthan</option><option>Karnataka</option><option>Gujarat</option>
+                <option>Tamil Nadu</option><option>Andhra Pradesh</option><option>Telangana</option>
+                <option>Bihar</option><option>West Bengal</option><option>Kerala</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button class="btn btn-outline-vio" style="flex:1;justify-content:center;padding:12px" onclick="regGoBack()">← Back</button>
+            <button class="btn btn-primary" id="rSendOtpBtn" style="flex:2;justify-content:center;padding:12px" onclick="regStep2()">Send OTP to Email →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: OTP -->
+        <div class="auth-step" id="regS3">
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">Verify Account</p>
+          <p style="font-size:13px;color:var(--text-lt);margin-bottom:16px">Step 3 of 3 — OTP verification</p>
+          <div class="otp-notice">
+            <span style="font-size:20px;flex-shrink:0">📧</span>
+            <div>
+              OTP sent to <strong id="rEmailPreview"></strong>.<br>
+              <span style="font-size:12px;color:var(--text-lt)">Check inbox &amp; spam. Valid 10 minutes.</span>
+            </div>
+          </div>
+          <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">Enter OTP:</p>
+          <div class="otp-grid">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,0,'rotp')">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,1,'rotp')">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,2,'rotp')">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,3,'rotp')">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,4,'rotp')">
+            <input type="text" maxlength="1" class="rotp" onkeyup="otpNav(this,5,'rotp')">
+          </div>
+          <button class="btn btn-primary" id="rVerifyBtn" style="width:100%;justify-content:center;padding:14px" onclick="regStep3()">✅ Create Account</button>
+          <div class="otp-timer" id="rTimer">Resend in <span id="rTimerCount">120</span>s</div>
+          <p style="text-align:center;margin-top:10px;font-size:12px">
+            <a href="#" id="rResend" style="color:var(--text-xlt);pointer-events:none" onclick="regResend()">Resend OTP</a>
+            &nbsp;·&nbsp;<a href="#" onclick="regGoBack2()" style="color:var(--text-lt)">← Back</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /auth-page -->
+
+
+
+<script src="js/api.js"></script>
+<script src="js/login-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D42026">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>NEET Cutoff Data 2024–2026 | EduTrack Nagpur</title>
+<meta name="description" content="NEET UG & PG cutoff closing ranks 2024–2026 — AIQ and state quota, round-wise data for MBBS, BDS, MD/MS college selection. EduTrack Nagpur.">
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.cutoff-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+.ctab { padding:9px 20px; border-radius:var(--r-pill); font-size:13px; font-weight:700; border:1.5px solid var(--border); color:var(--text-mid); background:var(--white); cursor:pointer; transition:all var(--t); }
+.ctab.active, .ctab:hover { background:var(--violet); color:#fff; border-color:var(--violet); box-shadow:0 4px 14px rgba(212,32,38,.3); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.year-tag { font-size:12px; font-weight:700; padding:3px 9px; border-radius:var(--r-pill); background:var(--violet-pale); color:var(--violet); }
+.cutoff-table-wrap { overflow-x:auto; border-radius:var(--r-md); border:2px solid var(--border); }
+.cutoff-table { width:100%; border-collapse:collapse; font-size:13px; min-width:600px; }
+.cutoff-table th { background:linear-gradient(135deg,#FFF4D6,#FFE8A0); color:var(--text); padding:11px 14px; text-align:left; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; border-bottom:2px solid var(--border); }
+.cutoff-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:middle; color:var(--text-mid); }
+.cutoff-table tr:nth-child(even) td { background:var(--surface); }
+.cutoff-table tr:hover td { background:var(--violet-pale); }
+
+/* ── Login Gate ── */
+.login-gate{position:fixed;inset:0;background:rgba(26,6,4,.72);backdrop-filter:blur(8px);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px}
+.login-gate-box{background:var(--white);border-radius:var(--r-xl);padding:48px 40px;max-width:460px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+</style>
+</head>
+<body>
+<div id="loginGate" class="login-gate" style="display:none">
+  <div class="login-gate-box">
+    <div style="font-size:52px;margin-bottom:16px">📊</div>
+    <h2 style="margin-bottom:10px">Login Required</h2>
+    <p style="color:var(--text-lt);font-size:14px;margin-bottom:28px;line-height:1.65">Login or register to access the complete cutoff data and analysis tools.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="login.html?next=cutoff.html" class="btn btn-primary btn-lg">👤 Login / Register</a>
+      <a href="index.html" class="btn btn-outline-vio">← Back</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-xlt);margin-top:16px">Free · Verified via OTP · Instant access</p>
+  </div>
+</div>
+<div id="announce" class="announce"></div>
+<div id="topbar"   class="topbar"></div>
+<div id="site-nav"></div>
+
+<section class="tool-hero">
+  <div class="wrap">
+    <div class="tool-hero-inner">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="cur">Cutoff Data</span></div>
+      <div class="eyebrow" style="color:var(--violet)">Free Resource</div>
+      <h1>NEET Cutoff Data 2024–2026</h1>
+      <p>Round-wise closing ranks for AIQ and state quota — MBBS, BDS, MD/MS, INI-CET. Use this data to understand cutoff trends and plan your choice filling strategy.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px">
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ AIQ + State Quota</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ 3-year trend</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ UG + PG data</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+
+    <!-- TABS -->
+    <div class="cutoff-tabs" id="tabBtns">
+      <button class="ctab active" onclick="showTab('aiq-ug')">AIQ — MBBS / BDS (UG)</button>
+      <button class="ctab" onclick="showTab('aiq-pg')">AIQ — MD / MS / DNB (PG)</button>
+      <button class="ctab" onclick="showTab('mh-ug')">Maharashtra State — UG</button>
+      <button class="ctab" onclick="showTab('mh-pg')">Maharashtra State — PG</button>
+      <button class="ctab" onclick="showTab('up-ug')">Uttar Pradesh State — UG</button>
+    </div>
+
+    <!-- AIQ UG -->
+    <div class="tab-panel active" id="tab-aiq-ug">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h3>MCC All India Quota — MBBS Closing Ranks</h3>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:4px">15% AIQ seats in Government & Central University colleges. Round 2 closing ranks (General/UR category).</p>
+        </div>
+        <button onclick="waQuick('Cutoff data — need personalised guidance for AIQ counselling')" class="btn btn-wa btn-sm">💬 Expert Help</button>
+      </div>
+      <div class="cutoff-table-wrap">
+        <table class="cutoff-table">
+          <thead><tr><th>College</th><th>Course</th><th>Type</th><th>2024 Closing</th><th>2023 Closing</th><th>2022 Closing</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr><td><strong>AIIMS New Delhi</strong></td><td>MBBS</td><td>Central</td><td>50</td><td>47</td><td>52</td><td>🟢 Stable</td></tr>
+            <tr><td>AIIMS Jodhpur</td><td>MBBS</td><td>Central</td><td>680</td><td>720</td><td>710</td><td>🟢 Stable</td></tr>
+            <tr><td>AIIMS Bhopal</td><td>MBBS</td><td>Central</td><td>850</td><td>890</td><td>810</td><td>🟡 Slight rise</td></tr>
+            <tr><td>AIIMS Raipur</td><td>MBBS</td><td>Central</td><td>1100</td><td>1050</td><td>980</td><td>🔴 Rising</td></tr>
+            <tr><td>AIIMS Bibinagar</td><td>MBBS</td><td>Central</td><td>2600</td><td>2480</td><td>2200</td><td>🔴 Rising</td></tr>
+            <tr><td>JIPMER Puducherry</td><td>MBBS</td><td>Central</td><td>820</td><td>800</td><td>780</td><td>🟢 Stable</td></tr>
+            <tr><td>MAULANA AZAD Delhi</td><td>MBBS</td><td>State/Central</td><td>1250</td><td>1180</td><td>1100</td><td>🔴 Rising</td></tr>
+            <tr><td>KGMU Lucknow</td><td>MBBS</td><td>Govt</td><td>5200</td><td>4900</td><td>4500</td><td>🔴 Rising</td></tr>
+            <tr><td>Grant Medical Mumbai</td><td>MBBS</td><td>Govt (State)</td><td>2900</td><td>2750</td><td>2600</td><td>🔴 Rising</td></tr>
+            <tr><td>MS Ramaiah Bangalore</td><td>MBBS</td><td>Private/Deemed</td><td>42000</td><td>38000</td><td>35000</td><td>🔴 Rising</td></tr>
+            <tr><td>Kasturba Manipal</td><td>MBBS</td><td>Deemed</td><td>52000</td><td>47000</td><td>43000</td><td>🔴 Rising</td></tr>
+            <tr><td>AIIMS New Delhi</td><td>BDS</td><td>Central</td><td>18000</td><td>17200</td><td>15800</td><td>🔴 Rising</td></tr>
+            <tr><td>Govt Dental Delhi</td><td>BDS</td><td>Govt</td><td>55000</td><td>51000</td><td>47000</td><td>🔴 Rising</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AIQ PG -->
+    <div class="tab-panel" id="tab-aiq-pg">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h3>MCC All India Quota — MD/MS/DNB Closing Ranks</h3>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:4px">50% AIQ PG seats. Round 2 closing ranks (General/UR category).</p>
+        </div>
+        <button onclick="waQuick('NEET PG cutoff data — need specialty and college guidance')" class="btn btn-wa btn-sm">💬 Expert Help</button>
+      </div>
+      <div class="cutoff-table-wrap">
+        <table class="cutoff-table">
+          <thead><tr><th>College / Specialty</th><th>Course</th><th>2024 Closing</th><th>2023 Closing</th><th>2022 Closing</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr><td><strong>AIIMS Delhi — General Medicine</strong></td><td>MD</td><td>198</td><td>185</td><td>172</td><td>🔴 Rising</td></tr>
+            <tr><td>AIIMS Delhi — Radiology</td><td>MD</td><td>82</td><td>77</td><td>70</td><td>🔴 Rising</td></tr>
+            <tr><td>AIIMS Delhi — Dermatology</td><td>MD</td><td>45</td><td>42</td><td>38</td><td>🔴 Rising</td></tr>
+            <tr><td>PGIMER — MD Paediatrics</td><td>MD</td><td>520</td><td>490</td><td>455</td><td>🔴 Rising</td></tr>
+            <tr><td>JIPMER — MD Gen Medicine</td><td>MD</td><td>830</td><td>790</td><td>740</td><td>🔴 Rising</td></tr>
+            <tr><td>KEM Mumbai — MS OBG</td><td>MS</td><td>2600</td><td>2400</td><td>2200</td><td>🔴 Rising</td></tr>
+            <tr><td>KGMU — MS Orthopaedics</td><td>MS</td><td>3800</td><td>3500</td><td>3200</td><td>🔴 Rising</td></tr>
+            <tr><td>GMC Nagpur — MD Anaesthesia</td><td>MD</td><td>23000</td><td>21000</td><td>18000</td><td>🔴 Rising</td></tr>
+            <tr><td>GMC Nagpur — MD Psychiatry</td><td>MD</td><td>19000</td><td>17500</td><td>15800</td><td>🔴 Rising</td></tr>
+            <tr><td>MS Ramaiah — MD Derm</td><td>MD</td><td>1250</td><td>1180</td><td>1100</td><td>🔴 Rising</td></tr>
+            <tr><td>AIIMS Delhi — MS Gen Surgery</td><td>MS</td><td>380</td><td>350</td><td>320</td><td>🔴 Rising</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MH UG -->
+    <div class="tab-panel" id="tab-mh-ug">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h3>Maharashtra State Quota — MBBS Closing Ranks (DMER)</h3>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:4px">85% state quota. Round 2 closing ranks (General/Open category). Domicile required.</p>
+        </div>
+        <button onclick="waQuick('Maharashtra NEET UG state cutoff — need counselling guidance')" class="btn btn-wa btn-sm">💬 Expert Help</button>
+      </div>
+      <div class="cutoff-table-wrap">
+        <table class="cutoff-table">
+          <thead><tr><th>College</th><th>City</th><th>Type</th><th>2024 Closing</th><th>2023 Closing</th><th>2022 Closing</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Grant Medical College</strong></td><td>Mumbai</td><td>Govt</td><td>2850</td><td>2700</td><td>2500</td></tr>
+            <tr><td>BJ Medical College</td><td>Pune</td><td>Govt</td><td>3600</td><td>3350</td><td>3100</td></tr>
+            <tr><td>Govt Medical College Nagpur</td><td>Nagpur</td><td>Govt</td><td>6200</td><td>5800</td><td>5400</td></tr>
+            <tr><td>Topiwala NMC</td><td>Mumbai</td><td>Govt</td><td>4200</td><td>3900</td><td>3600</td></tr>
+            <tr><td>Seth GS Medical KEM</td><td>Mumbai</td><td>Govt</td><td>3100</td><td>2900</td><td>2700</td></tr>
+            <tr><td>GMC Aurangabad</td><td>Aurangabad</td><td>Govt</td><td>9500</td><td>8800</td><td>8200</td></tr>
+            <tr><td>GMC Latur</td><td>Latur</td><td>Govt</td><td>14000</td><td>13200</td><td>12100</td></tr>
+            <tr><td>SSPM Medical Sindhudurg</td><td>Sindhudurg</td><td>Private</td><td>92000</td><td>87000</td><td>80000</td></tr>
+            <tr><td>Vedanta Inst Palghar</td><td>Palghar</td><td>Private</td><td>122000</td><td>115000</td><td>106000</td></tr>
+            <tr><td>Datta Meghe Wardha</td><td>Wardha</td><td>Deemed</td><td>75000</td><td>70000</td><td>64000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MH PG -->
+    <div class="tab-panel" id="tab-mh-pg">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h3>Maharashtra State PG — MD/MS Closing Ranks</h3>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:4px">DMER MH state PG quota. Round 2 closing ranks (General/Open). Bond service may apply.</p>
+        </div>
+        <button onclick="waQuick('Maharashtra NEET PG state cutoff — need MD/MS guidance')" class="btn btn-wa btn-sm">💬 Expert Help</button>
+      </div>
+      <div class="cutoff-table-wrap">
+        <table class="cutoff-table">
+          <thead><tr><th>College / Specialty</th><th>Course</th><th>2024 Closing</th><th>2023 Closing</th><th>2022 Closing</th></tr></thead>
+          <tbody>
+            <tr><td>Grant Medical — MD Gen Medicine</td><td>MD</td><td>4800</td><td>4500</td><td>4100</td></tr>
+            <tr><td>KEM Mumbai — MS OBG</td><td>MS</td><td>2800</td><td>2600</td><td>2400</td></tr>
+            <tr><td>BJ Pune — MS Orthopaedics</td><td>MS</td><td>5500</td><td>5100</td><td>4700</td></tr>
+            <tr><td>GMC Nagpur — MD Paediatrics</td><td>MD</td><td>9800</td><td>9000</td><td>8300</td></tr>
+            <tr><td>GMC Nagpur — MD Psychiatry</td><td>MD</td><td>18500</td><td>17200</td><td>15800</td></tr>
+            <tr><td>GMC Nagpur — MD Anaesthesia</td><td>MD</td><td>22000</td><td>20500</td><td>18800</td></tr>
+            <tr><td>GMC Aurangabad — MS ENT</td><td>MS</td><td>12000</td><td>11200</td><td>10400</td></tr>
+            <tr><td>Sion Hospital — MD Radiology</td><td>MD</td><td>3200</td><td>3000</td><td>2750</td></tr>
+            <tr><td>Seth GS KEM — MD Dermatology</td><td>MD</td><td>1800</td><td>1650</td><td>1500</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- UP UG -->
+    <div class="tab-panel" id="tab-up-ug">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <h3>Uttar Pradesh State Quota — MBBS Closing Ranks (DGME UP)</h3>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:4px">UP state quota. Round 2 closing ranks (General/UR category). Domicile required.</p>
+        </div>
+        <button onclick="waQuick('Uttar Pradesh NEET UG state cutoff — need college guidance')" class="btn btn-wa btn-sm">💬 Expert Help</button>
+      </div>
+      <div class="cutoff-table-wrap">
+        <table class="cutoff-table">
+          <thead><tr><th>College</th><th>City</th><th>Type</th><th>2024 Closing</th><th>2023 Closing</th><th>2022 Closing</th></tr></thead>
+          <tbody>
+            <tr><td><strong>KGMU Lucknow</strong></td><td>Lucknow</td><td>Central Univ</td><td>5300</td><td>4950</td><td>4600</td></tr>
+            <tr><td>GSVM Medical Kanpur</td><td>Kanpur</td><td>Govt</td><td>12500</td><td>11800</td><td>10900</td></tr>
+            <tr><td>BRD Medical Gorakhpur</td><td>Gorakhpur</td><td>Govt</td><td>15500</td><td>14700</td><td>13600</td></tr>
+            <tr><td>LLRM Meerut</td><td>Meerut</td><td>Govt</td><td>18000</td><td>17000</td><td>15800</td></tr>
+            <tr><td>SN Medical Agra</td><td>Agra</td><td>Govt</td><td>20000</td><td>18800</td><td>17500</td></tr>
+            <tr><td>MLN Medical Prayagraj</td><td>Prayagraj</td><td>Govt</td><td>22000</td><td>20700</td><td>19200</td></tr>
+            <tr><td>Prasad Inst Lucknow</td><td>Lucknow</td><td>Private</td><td>132000</td><td>125000</td><td>115000</td></tr>
+            <tr><td>Teerthankar Moradabad</td><td>Moradabad</td><td>Private</td><td>145000</td><td>137000</td><td>126000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HOW TO USE CUTOFFS -->
+    <div style="background:linear-gradient(135deg,var(--violet),#E8602A);border-radius:var(--r-xl);padding:48px;margin-top:56px;color:#fff" class="fade-up">
+      <div class="eyebrow" style="color:rgba(255,255,255,.8)">EduTrack Tip</div>
+      <h2 style="color:#fff;margin-bottom:16px">How to use cutoff data for choice filling</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:8px">
+        <div>
+          <div style="font-size:24px;margin-bottom:10px">📊</div>
+          <h4 style="color:#fff;margin-bottom:8px">Compare 3 years</h4>
+          <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.7">A single year can be an outlier. Always use 3-year average closing ranks — if a cutoff dropped suddenly in 2023 but rose back in 2024, the 2023 dip was a fluke.</p>
+        </div>
+        <div>
+          <div style="font-size:24px;margin-bottom:10px">🎯</div>
+          <h4 style="color:#fff;margin-bottom:8px">Add 10–15% buffer</h4>
+          <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.7">If the 3-year avg closing rank is 10,000 and your rank is 9,500 — it's NOT safe. Always add a 10–15% buffer above the closing rank to consider a seat "safe".</p>
+        </div>
+        <div>
+          <div style="font-size:24px;margin-bottom:10px">🔄</div>
+          <h4 style="color:#fff;margin-bottom:8px">Round 1 vs Round 2</h4>
+          <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.7">Round 2 closing ranks are always higher (more seats filled). Use Round 2 data for planning. Round 1 ranks are lower and lead students to false confidence.</p>
+        </div>
+      </div>
+      <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap">
+        <button onclick="waQuick('Need help interpreting cutoff data for my college choice list')" class="btn btn-wa">💬 Get Expert Help on WhatsApp</button>
+        <a href="predictor.html" class="btn btn-outline-white">🔮 Use College Predictor →</a>
+      </div>
+    </div>
+
+    <div style="background:var(--amber-pale);border:1px solid #FDE68A;border-radius:var(--r-md);padding:16px 22px;margin-top:24px;display:flex;gap:12px">
+      <span style="font-size:18px;flex-shrink:0">⚠️</span>
+      <p style="font-size:13px;color:#78350F;line-height:1.75">This data is based on publicly available information and is for guidance only. Cutoffs change every year. Always cross-verify with official MCC and state authority websites. EduTrack counsellors stay updated with every round's real-time data.</p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (!ET.isLoggedIn()) {
+    document.getElementById('loginGate').style.display = 'flex';
+    document.querySelectorAll('section.sec, section.tool-hero, section.sec-sm').forEach(el => {
+      el.style.filter = 'blur(5px)'; el.style.pointerEvents = 'none';
+    });
+  } else {
+    ET.updateNav();
+  }
+});
+</script>
+
+<script src="js/auth.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

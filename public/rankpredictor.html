@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D42026">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>NEET Rank Predictor 2026 | EduTrack Nagpur</title>
+<meta name="description" content="Free NEET UG Rank Predictor — enter your marks to instantly estimate your All India Rank. Based on 5-year score vs rank trend data. EduTrack Nagpur.">
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.rank-result-box {
+  background: linear-gradient(135deg, var(--violet), #E8602A);
+  border-radius: var(--r-xl); padding: 40px; text-align: center;
+  margin-top: 28px; display: none;
+}
+.rank-result-box.show { display: block; }
+.rank-num { font-family:var(--font-h); font-size:64px; font-weight:900; color:#fff; line-height:1; margin-bottom:8px; }
+.rank-range { font-size:14px; color:rgba(255,255,255,.75); margin-bottom:24px; }
+.rank-insights { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:24px; }
+.ri { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); border-radius:var(--r-md); padding:16px; }
+.ri-val { font-family:var(--font-h); font-size:22px; font-weight:800; color:#FFD166; }
+.ri-lbl { font-size:12px; color:rgba(255,255,255,.7); margin-top:4px; }
+.marks-slider-wrap { margin: 16px 0; }
+.marks-slider-wrap input[type=range] { width:100%; accent-color:var(--violet); height:6px; }
+.marks-display { font-family:var(--font-h); font-size:48px; font-weight:900; color:var(--text); text-align:center; margin:8px 0; }
+.marks-display span { color:var(--teal); }
+.marks-out { font-size:13px; color:var(--text-lt); text-align:center; }
+.score-band { display:flex; height:24px; border-radius:var(--r-pill); overflow:hidden; margin:24px 0; }
+.sb-seg { flex:1; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:#fff; }
+
+/* ── Login Gate ── */
+.login-gate{position:fixed;inset:0;background:rgba(26,6,4,.72);backdrop-filter:blur(8px);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px}
+.login-gate-box{background:var(--white);border-radius:var(--r-xl);padding:48px 40px;max-width:460px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+</style>
+</head>
+<body>
+<div id="loginGate" class="login-gate" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;align-items:center;justify-content:center">
+  <div style="max-width:480px;text-align:center;padding:40px 32px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.12)">
+    <div style="font-size:56px;margin-bottom:16px">🔐</div>
+    <h2 style="font-family:var(--font-h);font-size:22px;font-weight:900;color:var(--text);margin-bottom:10px">
+      Counsellor &amp; Admin Only
+    </h2>
+    <p style="color:var(--text-lt);font-size:14px;margin-bottom:8px;line-height:1.7">
+      The <strong>Rank Predictor</strong> is an internal tool exclusively for<br>
+      EduTrack counsellors and admins.
+    </p>
+    <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#B91C1C;line-height:1.6">
+      🚫 <strong>Students are not permitted to access this tool.</strong><br>
+      Your counsellor will share personalised rank predictions with you.<br>
+      Contact EduTrack if you need guidance.
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="admin.html" class="btn btn-primary btn-lg">🔐 Counsellor Login</a>
+      <a href="contact.html" class="btn btn-wa">💬 Request Guidance</a>
+      <a href="index.html" class="btn btn-outline-vio">← Back to Home</a>
+    </div>
+  </div>
+</div>
+<div id="announce" class="announce"></div>
+<div id="topbar"   class="topbar"></div>
+<div id="site-nav"></div>
+
+<section class="tool-hero">
+  <div class="wrap">
+    <div class="tool-hero-inner">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="cur">Rank Predictor</span></div>
+      <div class="eyebrow" style="color:var(--violet)">Free Tool</div>
+      <h1>NEET UG Rank Predictor 2026</h1>
+      <p>Enter your NEET UG marks — instantly get your estimated All India Rank range, percentile, and which categories of colleges you can target. Based on 5-year marks vs rank data.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px">
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ Based on 5-year data</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ Instant result</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ Free — no login needed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:480px 1fr;gap:48px;align-items:start">
+
+      <!-- FORM -->
+      <div class="predictor-form-card fade-up" style="position:sticky;top:90px">
+        <div class="eyebrow">Enter Your Marks</div>
+        <h3>NEET Score → Rank</h3>
+        <p class="sub">Move the slider or type your score. Result appears instantly.</p>
+
+        <div class="marks-slider-wrap">
+          <input type="range" id="marksSlider" min="1" max="720" value="360" oninput="updateFromSlider(this.value)">
+        </div>
+        <div class="marks-display" id="marksDisplay">360 <span>/ 720</span></div>
+        <div class="marks-out">Or type directly:</div>
+        <div class="field" style="margin-top:8px">
+          <input type="number" id="marksInput" placeholder="Enter marks out of 720" min="1" max="720"
+            oninput="updateFromInput(this.value)" style="text-align:center;font-size:20px;font-weight:800">
+        </div>
+
+        <div class="field">
+          <label>Category</label>
+          <select id="rpCategory">
+            <option value="general">General (UR)</option>
+            <option value="obc">OBC-NCL</option>
+            <option value="sc">SC</option>
+            <option value="st">ST</option>
+            <option value="ews">EWS</option>
+          </select>
+        </div>
+        <button onclick="predictRank()" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:12px">📊 Predict My Rank →</button>
+        <a href="predictor.html" class="btn btn-outline-green btn-sm" style="width:100%;justify-content:center">🔮 Use College Predictor with this rank</a>
+      </div>
+
+      <!-- RESULT -->
+      <div class="fade-up d2">
+        <div class="rank-result-box" id="rankResult">
+          <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px">Your Estimated All India Rank</div>
+          <div class="rank-num" id="rankNum">—</div>
+          <div class="rank-range" id="rankRange"></div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
+            <span id="percentileTag" class="badge badge-pg" style="font-size:13px;padding:6px 14px"></span>
+            <span id="qualifiedTag"  class="badge badge-ug" style="font-size:13px;padding:6px 14px"></span>
+          </div>
+          <div class="rank-insights">
+            <div class="ri"><div class="ri-val" id="riGovt">—</div><div class="ri-lbl">Govt MBBS Chance</div></div>
+            <div class="ri"><div class="ri-val" id="riPriv">—</div><div class="ri-lbl">Private MBBS Reach</div></div>
+            <div class="ri"><div class="ri-val" id="riAIIMS">—</div><div class="ri-lbl">AIIMS Possibility</div></div>
+          </div>
+          <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button id="toPredBtn" onclick="" class="btn btn-primary">🔮 See Matching Colleges →</button>
+            <button onclick="waQuick('Rank predictor done — need counselling guidance for my NEET score')" class="btn btn-wa">💬 WhatsApp Expert</button>
+          </div>
+        </div>
+
+        <!-- SCORE BANDS TABLE -->
+        <div style="margin-top:20px" id="scoreBands">
+          <div class="eyebrow">Score Band Reference</div>
+          <h3 style="margin-bottom:24px">Marks vs Rank — Historical Trend</h3>
+          <div class="cutoff-table-wrap">
+            <table class="cutoff-table">
+              <thead><tr><th>Marks Range</th><th>Est. AIR (General)</th><th>Est. Percentile</th><th>Likely Colleges</th></tr></thead>
+              <tbody>
+                <tr><td><strong>680–720</strong></td><td>1–50</td><td>99.99+</td><td>AIIMS Delhi, Top AIIMS</td></tr>
+                <tr><td><strong>650–679</strong></td><td>51–500</td><td>99.96+</td><td>All AIIMS, JIPMER</td></tr>
+                <tr><td><strong>620–649</strong></td><td>501–2,500</td><td>99.8+</td><td>AIIMS newer, Top Govt MBBS</td></tr>
+                <tr><td><strong>580–619</strong></td><td>2,500–8,000</td><td>99.4+</td><td>Top Govt MBBS AIQ (all states)</td></tr>
+                <tr><td><strong>550–579</strong></td><td>8,000–18,000</td><td>98.7+</td><td>Good Govt MBBS AIQ + State</td></tr>
+                <tr><td><strong>520–549</strong></td><td>18,000–40,000</td><td>97.2+</td><td>Govt MBBS (state quota)</td></tr>
+                <tr><td><strong>480–519</strong></td><td>40,000–80,000</td><td>94+</td><td>State Govt MBBS (competitive)</td></tr>
+                <tr><td><strong>450–479</strong></td><td>80,000–1,30,000</td><td>90+</td><td>State Govt MBBS (some states), Private top</td></tr>
+                <tr><td><strong>400–449</strong></td><td>1,30,000–2,50,000</td><td>82+</td><td>Private MBBS, BDS Govt</td></tr>
+                <tr><td><strong>350–399</strong></td><td>2,50,000–4,50,000</td><td>68+</td><td>Private MBBS (later rounds), BDS</td></tr>
+                <tr><td><strong>300–349</strong></td><td>4,50,000–7,00,000</td><td>52+</td><td>BDS, AYUSH (BAMS/BHMS/BUMS)</td></tr>
+                <tr><td><strong>Below 300</strong></td><td>7,00,000+</td><td>Below 50</td><td>AYUSH courses, MBBS Abroad option</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="background:var(--amber-pale);border:1px solid #FDE68A;border-radius:var(--r-md);padding:14px 18px;margin-top:16px">
+            <p style="font-size:13px;color:#78350F">⚠️ These are historical averages. Actual ranks vary year to year based on difficulty, number of candidates and normalisation. Use as a guide — not as a guaranteed prediction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER RANK SECTION -->
+    <div style="margin-top:72px" class="fade-up">
+      <div class="sec-head" style="margin-bottom:40px">
+        <div class="eyebrow">What Next?</div>
+        <h2>After knowing your rank — here's your roadmap</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div style="background:var(--teal-pale);border:1px solid var(--teal-pale2);border-radius:var(--r-lg);padding:28px">
+          <div style="font-size:32px;margin-bottom:12px">🔮</div>
+          <h4 style="margin-bottom:8px">Run College Predictor</h4>
+          <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:16px">Use your predicted rank in our College Predictor to see exactly which colleges you can target — with High, Moderate, and Low chance classification.</p>
+          <a href="predictor.html" class="btn btn-primary btn-sm" style="display:inline-flex">College Predictor →</a>
+        </div>
+        <div style="background:var(--teal-pale);border:1px solid var(--teal-pale2);border-radius:var(--r-lg);padding:28px">
+          <div style="font-size:32px;margin-bottom:12px">📈</div>
+          <h4 style="margin-bottom:8px">Check Cutoff Trends</h4>
+          <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:16px">See actual past 3-year closing ranks for AIQ and state quota — understand how cutoffs moved round by round.</p>
+          <a href="cutoff.html" class="btn btn-primary btn-sm" style="display:inline-flex">Cutoff Data →</a>
+        </div>
+        <div style="background:var(--teal-pale);border:1px solid var(--teal-pale2);border-radius:var(--r-lg);padding:28px">
+          <div style="font-size:32px;margin-bottom:12px">💬</div>
+          <h4 style="margin-bottom:8px">Book EduTrack Counselling</h4>
+          <p style="font-size:14px;color:var(--text-lt);line-height:1.7;margin-bottom:16px">Let EduTrack counsellors validate your rank, build your choice list strategy and guide you through every counselling round.</p>
+          <a href="contact.html" class="btn btn-primary btn-sm" style="display:inline-flex">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script>
+/* Marks → Rank mapping (5-year average, general category) */
+const MARKS_RANK = [
+  [720,1],[710,5],[700,15],[690,50],[680,150],[670,350],[660,600],[650,1000],
+  [640,1600],[630,2500],[620,3800],[610,5500],[600,7800],[590,10500],[580,14000],
+  [570,18000],[560,23000],[550,29000],[540,36000],[530,45000],[520,56000],
+  [510,70000],[500,87000],[490,107000],[480,130000],[470,158000],[460,192000],
+  [450,232000],[440,278000],[430,330000],[420,390000],[410,460000],[400,540000],
+  [380,710000],[360,920000],[340,1150000],[320,1380000],[300,1600000],[1,2000000]
+];
+
+const CAT_FACTOR = { general:1, obc:0.55, sc:0.35, st:0.22, ews:0.72 };
+
+function interpolateRank(marks, catFactor) {
+  for (let i=0; i<MARKS_RANK.length-1; i++) {
+    const [m1,r1] = MARKS_RANK[i];
+    const [m2,r2] = MARKS_RANK[i+1];
+    if (marks <= m1 && marks >= m2) {
+      const t = (m1 - marks) / (m1 - m2);
+      const baseRank = Math.round(r1 + t*(r2-r1));
+      return Math.max(1, Math.round(baseRank * catFactor));
+    }
+  }
+  return Math.round(2000000 * catFactor);
+}
+
+function getPercentile(rank) {
+  /* rough: total ~23L candidates */
+  return Math.max(0, Math.min(99.99, ((2300000-rank)/2300000*100))).toFixed(2);
+}
+
+function updateFromSlider(v) {
+  document.getElementById('marksInput').value = v;
+  document.getElementById('marksDisplay').innerHTML = `${v} <span>/ 720</span>`;
+}
+function updateFromInput(v) {
+  const val = Math.max(1, Math.min(720, parseInt(v)||1));
+  document.getElementById('marksSlider').value = val;
+  document.getElementById('marksDisplay').innerHTML = `${val} <span>/ 720</span>`;
+}
+
+function predictRank() {
+  const marks  = parseInt(document.getElementById('marksInput').value || document.getElementById('marksSlider').value);
+  const cat    = document.getElementById('rpCategory').value;
+  const factor = CAT_FACTOR[cat] || 1;
+
+  const baseRank = interpolateRank(marks, 1);
+  const catRank  = interpolateRank(marks, factor);
+  const percentile = getPercentile(catRank);
+  const qualified  = marks >= (cat==='general'?360:288); /* approx NEET cutoff scores */
+
+  document.getElementById('rankNum').textContent   = catRank.toLocaleString();
+  document.getElementById('rankRange').textContent = `Estimated range: ${Math.round(catRank*0.85).toLocaleString()} – ${Math.round(catRank*1.15).toLocaleString()} (General AIR: ${baseRank.toLocaleString()})`;
+  document.getElementById('percentileTag').textContent  = `Percentile: ~${percentile}%`;
+  document.getElementById('qualifiedTag').textContent   = qualified ? '✅ Likely Qualified' : '⚠️ Near Cutoff';
+
+  /* Insights */
+  document.getElementById('riGovt').textContent  = catRank <= 100000 ? '✅ High'  : catRank <= 250000 ? '⚡ Moderate' : '❌ Low';
+  document.getElementById('riPriv').textContent  = catRank <= 600000 ? '✅ Yes'   : '❌ Difficult';
+  document.getElementById('riAIIMS').textContent = catRank <= 2500   ? '✅ Yes'   : catRank <= 10000  ? '⚡ Possible' : '❌ No';
+
+  /* Link to predictor */
+  document.getElementById('toPredBtn').onclick = () => {
+    localStorage.setItem('edutrack_rank', catRank);
+    window.location.href = 'predictor.html';
+  };
+
+  document.getElementById('rankResult').classList.add('show');
+  document.getElementById('rankResult').scrollIntoView({behavior:'smooth',block:'start'});
+  showToast(`Estimated rank: ${catRank.toLocaleString()} 🎯`, 'success');
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ADMIN / COUNSELLOR ONLY — students are NOT allowed
+  var isAdmin = ET.isAdmin() || !!localStorage.getItem('et_admin_active');
+  if (!isAdmin) {
+    // Block completely — hide all page content, show gate
+    document.getElementById('loginGate').style.display = 'flex';
+    document.querySelectorAll('section, .tool-hero, .page-hero').forEach(function(el) {
+      el.style.display = 'none';
+    });
+    // Also hide nav announce and topbar so page looks like a clean gate
+    ['announce','topbar','site-nav','site-footer'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.style.display = 'none';
+    });
+  } else {
+    ET.updateNav();
+  }
+});
+</script>
+
+<script src="js/auth.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

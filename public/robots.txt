@@ -1,0 +1,16 @@
+# EduTrack Education Solution — robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /dashboard.html
+Disallow: /login.html
+
+# Sitemaps
+Sitemap: https://edutracksolution.co.in/sitemap.xml
+
+# Crawl-delay for bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

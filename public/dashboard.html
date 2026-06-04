@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,follow">
+<title>My Dashboard | EduTrack Student Portal</title>
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.dash-wrap { display:grid; grid-template-columns:240px 1fr; min-height:calc(100vh - 82px); }
+.dash-sb {
+  background:var(--text); padding:0; position:sticky; top:82px;
+  height:calc(100vh - 82px); overflow-y:auto; display:flex; flex-direction:column;
+}
+.dash-sb-logo { padding:18px 18px 14px; border-bottom:1px solid rgba(255,255,255,.08); }
+.dash-sb-logo img { height:48px; }
+.dash-sb-user { padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.06); }
+.dash-avatar { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--teal)); display:flex; align-items:center; justify-content:center; font-family:var(--font-h); font-size:17px; font-weight:800; color:#fff; margin-bottom:8px; }
+.dash-sb-name { color:#fff; font-size:14px; font-weight:800; }
+.dash-sb-sub  { color:rgba(255,255,255,.4); font-size:11px; margin-top:2px; }
+.dash-nav { flex:1; padding:8px 0; }
+.dash-nav a { display:flex; align-items:center; gap:9px; padding:11px 18px; color:rgba(255,255,255,.6); font-size:13px; font-weight:600; transition:all .18s; border-left:3px solid transparent; cursor:pointer; text-decoration:none; }
+.dash-nav a:hover, .dash-nav a.on { color:#fff; background:rgba(255,255,255,.07); border-left-color:var(--violet); }
+.dash-nav .nsh { padding:14px 18px 4px; font-size:10px; font-weight:800; color:rgba(255,255,255,.25); letter-spacing:1.5px; text-transform:uppercase; }
+.notif-dot { width:8px; height:8px; border-radius:50%; background:var(--violet); margin-left:auto; animation:blink 1.4s infinite; }
+.dash-sb-foot { padding:16px 18px; border-top:1px solid rgba(255,255,255,.06); }
+.dash-main { background:var(--surface); padding:32px; }
+.dpanel { display:none; } .dpanel.on { display:block; }
+.dash-title { font-family:var(--font-h); font-size:22px; font-weight:800; color:var(--text); margin-bottom:4px; }
+.dash-sub   { font-size:14px; color:var(--text-lt); margin-bottom:24px; }
+
+/* Stats row */
+.dash-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.dstat { background:var(--white); border-radius:var(--r-lg); border:2px solid var(--border); padding:20px; text-align:center; }
+.dstat-num { font-family:var(--font-h); font-size:28px; font-weight:900; color:var(--violet); }
+.dstat-lbl { font-size:11px; color:var(--text-lt); font-weight:700; text-transform:uppercase; letter-spacing:.4px; margin-top:4px; }
+
+/* Info cards */
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.info-card { background:var(--white); border-radius:var(--r-lg); border:2px solid var(--border); padding:24px; }
+.info-card h4 { font-size:13px; font-weight:800; color:var(--violet); text-transform:uppercase; letter-spacing:.5px; margin-bottom:16px; }
+.info-row { display:flex; justify-content:space-between; align-items:flex-start; padding:9px 0; border-bottom:1px solid var(--border); }
+.info-row:last-child { border-bottom:none; }
+.info-label { font-size:12px; color:var(--text-lt); font-weight:600; }
+.info-value { font-size:13px; color:var(--text); font-weight:700; text-align:right; max-width:60%; word-break:break-word; }
+.info-value.red  { color:var(--violet); }
+.info-value.teal { color:var(--teal); }
+.score-ring { width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--teal)); display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 14px; box-shadow:var(--sh-vio); }
+.score-num  { font-family:var(--font-h); font-size:26px; font-weight:900; color:#fff; line-height:1; }
+.score-den  { font-size:10px; color:rgba(255,255,255,.7); }
+
+/* Choice list */
+.cl-banner { border-radius:var(--r-lg); padding:24px; text-align:center; margin-bottom:20px; border:2px solid var(--border); }
+.cl-banner.ready { background:linear-gradient(135deg,#F0FDF4,#ECFDF5); border-color:#22c55e; }
+.cl-banner.waiting { background:linear-gradient(135deg,var(--violet-pale),var(--teal-pale)); }
+.cl-card { background:var(--white); border:2px solid var(--border); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; gap:12px; margin-bottom:8px; transition:all .2s; }
+.cl-card:hover { border-color:var(--violet); }
+.cl-num { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--teal)); color:#fff; font-family:var(--font-h); font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cl-name { font-size:14px; font-weight:700; color:var(--text); flex:1; }
+.cl-meta { font-size:11px; color:var(--text-lt); margin-top:2px; }
+.cl-fee  { font-size:13px; font-weight:800; color:var(--violet); text-align:right; }
+.admin-note-box { background:#FFFBEB; border:1.5px solid var(--amber); border-radius:var(--r-sm); padding:13px 16px; font-size:13px; color:var(--amber-dark); margin-bottom:16px; line-height:1.65; }
+
+/* Saved colleges */
+.saved-empty { text-align:center; padding:48px 24px; background:var(--white); border-radius:var(--r-lg); border:2px dashed var(--border); }
+.sc-item { background:var(--white); border:2px solid var(--border); border-radius:var(--r-md); padding:12px 14px; display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.sc-item:hover { border-color:var(--violet); }
+.sc-name { font-size:14px; font-weight:700; color:var(--text); flex:1; }
+.sc-meta { font-size:11px; color:var(--text-lt); margin-top:2px; }
+.sc-fee  { font-size:13px; font-weight:800; color:var(--violet); }
+.sc-del  { background:none; border:none; color:var(--text-xlt); font-size:18px; cursor:pointer; padding:0 4px; border-radius:var(--r-sm); transition:all .2s; }
+.sc-del:hover { background:#FEF2F2; color:var(--violet); }
+
+/* Quick links */
+.ql-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.ql-card { background:var(--white); border:2px solid var(--border); border-radius:var(--r-lg); padding:20px; text-align:center; transition:all .2s; text-decoration:none; display:block; }
+.ql-card:hover { border-color:var(--violet); box-shadow:var(--sh-sm); transform:translateY(-3px); }
+.ql-icon { font-size:30px; margin-bottom:8px; }
+.ql-title { font-family:var(--font-h); font-size:13px; font-weight:800; color:var(--text); margin-bottom:4px; }
+.ql-sub   { font-size:11px; color:var(--text-lt); }
+
+@media(max-width:768px) {
+  .dash-wrap  { grid-template-columns:1fr; }
+  .dash-sb    { position:static; height:auto; }
+  .dash-stats { grid-template-columns:1fr 1fr; }
+  .info-grid  { grid-template-columns:1fr; }
+  .ql-grid    { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="announce" class="announce"></div>
+<div id="topbar"   class="topbar"></div>
+<div id="site-nav"></div>
+
+<div class="dash-wrap">
+  <!-- SIDEBAR -->
+  <aside class="dash-sb">
+    <div class="dash-sb-logo">
+      <img src="edutrack-logo.jpg" alt="EduTrack" loading="eager">
+    </div>
+    <div class="dash-sb-user">
+      <div class="dash-avatar" id="sbAv">S</div>
+      <div class="dash-sb-name" id="sbName">Student</div>
+      <div class="dash-sb-sub"  id="sbSub">Dashboard</div>
+    </div>
+    <nav class="dash-nav">
+      <div class="nsh">Main</div>
+      <a onclick="dp('overview')"  class="on" id="dn-overview">🏠 Dashboard</a>
+      <a onclick="dp('profile')"   id="dn-profile">👤 My Profile</a>
+      <div class="nsh">Counselling</div>
+      <a onclick="dp('choicelist')" id="dn-choicelist">
+        📋 My Choice List
+        <span class="notif-dot" id="clDot" style="display:none"></span>
+      </a>
+      <a onclick="dp('saved')" id="dn-saved">☑️ Saved Colleges</a>
+      <div class="nsh">Tools</div>
+      <a href="institutes.html">🏛️ Institutes &amp; Fees</a>
+      <div class="nsh">Support</div>
+      <a href="contact.html">💬 Contact Counsellor</a>
+      <a href="results.html">🏆 Student Results</a>
+    </nav>
+    <div class="dash-sb-foot">
+      <button class="btn btn-outline-vio btn-sm" style="width:100%;justify-content:center" onclick="ET.logout()">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div class="dpanel on" id="dp-overview">
+      <div class="dash-title" id="welcomeMsg">Welcome!</div>
+      <div class="dash-sub">Your personalised NEET counselling portal.</div>
+
+      <!-- Welcome banner -->
+      <div style="background:linear-gradient(135deg,var(--violet),var(--teal));border-radius:var(--r-lg);padding:22px 26px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
+        <div><h3 style="color:#fff;font-size:18px;margin-bottom:3px" id="bannerMsg">Hello!</h3><p style="color:rgba(255,255,255,.78);font-size:13px;margin:0">Your personalised NEET counselling portal is ready.</p></div>
+        <a href="contact.html" class="btn btn-white" style="color:var(--violet)">📋 Book Session</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="dstat"><div class="dstat-num" id="ovScore">—</div><div class="dstat-lbl">NEET Score</div></div>
+        <div class="dstat"><div class="dstat-num" id="ovAIR" style="color:var(--teal)">—</div><div class="dstat-lbl">All India Rank</div></div>
+        <div class="dstat"><div class="dstat-num" id="ovSaved" style="color:#059669">0</div><div class="dstat-lbl">Saved Colleges</div></div>
+        <div class="dstat"><div class="dstat-num" id="ovCL" style="color:#D97706">—</div><div class="dstat-lbl">Choice List</div></div>
+      </div>
+
+      <!-- Choice list notification -->
+      <div id="ovCLNotif" style="display:none;background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border:2px solid #22c55e;border-radius:var(--r-lg);padding:18px 22px;margin-bottom:18px;display:none;align-items:center;gap:14px">
+        <span style="font-size:28px">✅</span>
+        <div><strong style="color:#166534">Your Choice List is Ready!</strong><p style="color:#047857;font-size:13px;margin:3px 0 0">Your counsellor has sent a personalised college list. Click to view.</p></div>
+        <button onclick="dp('choicelist')" class="btn btn-primary" style="margin-left:auto;flex-shrink:0">View Now →</button>
+      </div>
+
+      <!-- Quick links -->
+      <h4 style="margin-bottom:14px;font-size:15px">Quick Actions</h4>
+      <div class="ql-grid">
+        <div class="ql-card" style="cursor:default;opacity:.7"><div class="ql-icon">🔮</div><div class="ql-title">College Predictor</div><div class="ql-sub">Ask your counsellor for predictions</div></div>
+        <a href="institutes.html" class="ql-card"><div class="ql-icon">🏛️</div><div class="ql-title">Institutes &amp; Fees</div><div class="ql-sub">672+ colleges · Tick to shortlist</div></a>
+        <a onclick="dp('choicelist')" class="ql-card" style="cursor:pointer"><div class="ql-icon">📋</div><div class="ql-title">My Choice List</div><div class="ql-sub">View counsellor's list</div></a>
+        <a onclick="dp('saved')" class="ql-card" style="cursor:pointer"><div class="ql-icon">☑️</div><div class="ql-title">Saved Colleges</div><div class="ql-sub">Your shortlisted colleges</div></a>
+        <a href="contact.html" class="ql-card"><div class="ql-icon">💬</div><div class="ql-title">Contact Counsellor</div><div class="ql-sub">Call / WhatsApp EduTrack</div></a>
+        <div class="ql-card" style="cursor:default;opacity:.7"><div class="ql-icon">📊</div><div class="ql-title">Rank Predictor</div><div class="ql-sub">Ask your counsellor for rank estimates</div></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="dpanel" id="dp-profile">
+      <div class="dash-title">👤 My Profile</div>
+      <div class="dash-sub">Your registered details and NEET information.</div>
+      <div class="info-grid" id="profileGrid"></div>
+      <!-- Edit profile card -->
+      <div id="editProfileCard" style="display:none;background:var(--white);border:2px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-top:20px">
+        <h4 style="font-size:15px;font-weight:800;margin-bottom:16px;color:var(--violet)">✏️ Edit My Details</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="field"><label>Mobile Number</label><input type="tel" id="epMobile" placeholder="10-digit" maxlength="10"></div>
+          <div class="field"><label>City</label><input type="text" id="epCity"></div>
+          <div class="field"><label>State</label><input type="text" id="epState"></div>
+          <div class="field"><label>NEET Score</label><input type="number" id="epScore" min="0" max="720"></div>
+          <div class="field"><label>All India Rank</label><input type="number" id="epAIR" min="1"></div>
+          <div class="field"><label>Category</label>
+            <select id="epCategory"><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option><option>PWD</option></select>
+          </div>
+          <div class="field"><label>Domicile State</label><input type="text" id="epDomicile"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button onclick="cancelEditProfile()" class="btn btn-outline-vio">Cancel</button>
+          <button onclick="saveEditProfile()" class="btn btn-primary">&#128190; Save My Details</button>
+        </div>
+        <div id="epMsg" style="margin-top:10px;font-size:13px;display:none"></div>
+      </div>
+      <div style="margin-top:16px">
+        <button id="toggleEditProfileBtn" onclick="toggleEditProfile()" class="btn btn-outline-vio btn-sm">&#9999;&#65039; Edit My Details</button>
+      </div>
+    </div>
+
+    <!-- CHOICE LIST -->
+    <div class="dpanel" id="dp-choicelist">
+      <div class="dash-title">📋 My Choice List</div>
+      <div class="dash-sub">Personalised choice list from your EduTrack counsellor.</div>
+      <div id="clContent"></div>
+    </div>
+
+    <!-- SAVED COLLEGES -->
+    <div class="dpanel" id="dp-saved">
+      <div class="dash-title">☑️ Saved Colleges</div>
+      <div class="dash-sub">Colleges you shortlisted from the Institutes &amp; Fees page.</div>
+      <div id="savedContent"></div>
+    </div>
+
+  </main>
+</div><!-- /dash-wrap -->
+
+<!-- Firebase SDK -->
+
+
+
+
+
+
+
+
+
+
+<script src="js/api.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+<script src="js/dashboard-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#D42026">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>NEET College Predictor 2026 | Free Tool | EduTrack Nagpur</title>
+<meta name="description" content="Free NEET UG & PG College Predictor 2026 — enter rank, category & state to get personalised MBBS/BDS/MD/MS college list based on 3-year cutoff data.">
+<meta name="keywords" content="NEET college predictor 2026, MBBS predictor, NEET rank college list, college predictor NEET UG">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="EduTrack Education Solution">
+<link rel="canonical" href="https://edutracksolution.co.in/predictor.html">
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://edutracksolution.co.in/predictor.html">
+<meta property="og:title" content="NEET College Predictor 2026 | Free Tool | EduTrack Nagpur">
+<meta property="og:description" content="Free NEET UG & PG College Predictor 2026 — enter rank, category & state to get personalised MBBS/BDS/MD/MS college list based on 3-year cutoff data.">
+<meta property="og:image" content="https://edutracksolution.co.in/edutrack-logo.jpg">
+<meta property="og:site_name" content="EduTrack Education Solution">
+<meta property="og:locale" content="en_IN">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NEET College Predictor 2026 | Free Tool | EduTrack Nagpur">
+<meta name="twitter:description" content="Free NEET UG & PG College Predictor 2026 — enter rank, category & state to get personalised MBBS/BDS/MD/MS college list based on 3-year cutoff data.">
+<meta name="twitter:image" content="https://edutracksolution.co.in/edutrack-logo.jpg">
+<!-- Preconnect for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://images.unsplash.com">
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.filter-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+.filter-row select { padding:8px 12px; border:1.5px solid var(--border); border-radius:var(--r-sm); font-size:13px; font-weight:600; color:var(--text); background:var(--white); cursor:pointer; }
+.filter-row select:focus { outline:none; border-color:var(--teal); }
+.result-count { font-size:13px; color:var(--text-lt); margin-bottom:16px; font-weight:600; }
+.pred-section-title { font-size:12px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-lt); margin:20px 0 10px; padding:8px 12px; background:var(--surface); border-radius:var(--r-sm); }
+.wa-cta-inline { background:linear-gradient(135deg,#FFF4D6,#FFE8A0); border:2px solid var(--border); border-radius:var(--r-md); padding:18px; text-align:center; margin-top:24px; }
+.wa-cta-inline p { font-size:13px; color:var(--text-mid); margin-bottom:10px; }
+
+/* ── Login Gate ── */
+.login-gate{position:fixed;inset:0;background:rgba(26,6,4,.72);backdrop-filter:blur(8px);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px}
+.login-gate-box{background:var(--white);border-radius:var(--r-xl);padding:48px 40px;max-width:460px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+</style>
+</head>
+<body>
+<div id="loginGate" class="login-gate" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;align-items:center;justify-content:center">
+  <div style="max-width:480px;text-align:center;padding:40px 32px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.12)">
+    <div style="font-size:56px;margin-bottom:16px">🔐</div>
+    <h2 style="font-family:var(--font-h);font-size:22px;font-weight:900;color:var(--text);margin-bottom:10px">
+      Counsellor &amp; Admin Only
+    </h2>
+    <p style="color:var(--text-lt);font-size:14px;margin-bottom:8px;line-height:1.7">
+      The <strong>College Predictor</strong> is an internal tool exclusively for<br>
+      EduTrack counsellors and admins.
+    </p>
+    <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#B91C1C;line-height:1.6">
+      🚫 <strong>Students are not permitted to access this tool.</strong><br>
+      Your counsellor will prepare a personalised choice list for you.<br>
+      Contact EduTrack if you need guidance.
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="admin.html" class="btn btn-primary">🔐 Counsellor / Admin Login</a>
+      <a href="https://wa.me/918484098904" target="_blank" class="btn btn-wa">💬 Contact EduTrack</a>
+      <a href="index.html" class="btn btn-outline-vio">← Home</a>
+    </div>
+  </div>
+</div>
+<div id="announce" class="announce"></div>
+<div id="topbar"   class="topbar"></div>
+<div id="site-nav"></div>
+
+<section class="tool-hero">
+  <div class="wrap">
+    <div class="tool-hero-inner">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span class="cur">College Predictor</span></div>
+      <div class="eyebrow" style="color:var(--violet)">Free Tool</div>
+      <h1>NEET College Predictor 2026</h1>
+      <p>Enter your NEET rank, category and state — get a personalised, data-driven list of MBBS, BDS and MD/MS colleges with realistic admission chances based on 3-year cutoff trends.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:24px">
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ Based on real cutoff data</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ UG + PG prediction</div>
+        <div class="pill-green" style="background:rgba(212,32,38,.1);color:var(--violet);border:1.5px solid rgba(212,32,38,.25)">✓ 100% free</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="predictor-wrap">
+
+      <!-- FORM -->
+      <div class="predictor-form-card fade-up">
+        <div class="eyebrow">Your Profile</div>
+        <h3>Find Your Colleges</h3>
+        <p class="sub">Fill your details — results appear instantly below.</p>
+        <div class="field">
+          <label>Exam Type</label>
+          <select id="pExam">
+            <option value="ug">NEET UG (MBBS / BDS / AYUSH)</option>
+            <option value="pg">NEET PG (MD / MS / DNB)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Your NEET Rank (AIR)</label>
+          <input type="number" id="pRank" placeholder="e.g. 45000" min="1" max="2000000">
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="pCategory">
+            <option value="general">General (UR)</option>
+            <option value="obc">OBC-NCL</option>
+            <option value="sc">SC</option>
+            <option value="st">ST</option>
+            <option value="ews">EWS</option>
+            <option value="pwd">PwD</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>State of Domicile</label>
+          <select id="pState">
+            <option value="mh">Maharashtra</option>
+            <option value="up">Uttar Pradesh</option>
+            <option value="dl">Delhi</option>
+            <option value="ka">Karnataka</option>
+            <option value="tn">Tamil Nadu</option>
+            <option value="rj">Rajasthan</option>
+            <option value="mp">Madhya Pradesh</option>
+            <option value="gj">Gujarat</option>
+            <option value="wb">West Bengal</option>
+            <option value="other">Other State</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Quota Preference</label>
+          <select id="pQuota">
+            <option value="both">Both AIQ + State Quota</option>
+            <option value="aiq">All India Quota (AIQ) only</option>
+            <option value="state">State Quota only</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <select id="pGender">
+            <option value="all">Any</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
+        </div>
+        <button onclick="runPredictor()" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:12px">🔮 Predict My Colleges →</button>
+        <button onclick="waQuick('College Predictor result — I need personalised guidance for my NEET rank')" class="btn btn-wa btn-sm" style="width:100%;justify-content:center">💬 Get Expert Help on WhatsApp</button>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="predictor-results fade-up d2" id="predResults">
+        <div class="pred-empty">
+          <div class="icon">🔮</div>
+          <h4>Enter your details on the left and click "Predict My Colleges"</h4>
+          <p style="font-size:13px;color:var(--text-lt);margin-top:8px">Results are based on 3-year average closing ranks from MCC AIQ and major state counselling rounds.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="margin-top:72px" class="fade-up">
+      <div class="sec-head" style="margin-bottom:40px">
+        <div class="eyebrow">How It Works</div>
+        <h2>Data-driven college prediction</h2>
+        <p class="lead mt8">Our predictor uses 3 years of actual closing rank data from MCC AIQ and state counselling rounds — not guesses. Here's how it works.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+        <div style="text-align:center;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border)">
+          <div style="font-size:36px;margin-bottom:12px">📝</div>
+          <h4 style="margin-bottom:8px;font-size:14px">Enter Your Profile</h4>
+          <p style="font-size:13px;color:var(--text-lt)">NEET rank, category, state and quota preference — each matters for accurate prediction.</p>
+        </div>
+        <div style="text-align:center;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border)">
+          <div style="font-size:36px;margin-bottom:12px">📊</div>
+          <h4 style="margin-bottom:8px;font-size:14px">Match Against Cutoffs</h4>
+          <p style="font-size:13px;color:var(--text-lt)">Your rank is compared against 3-year closing ranks from MCC and state authorities.</p>
+        </div>
+        <div style="text-align:center;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border)">
+          <div style="font-size:36px;margin-bottom:12px">🎯</div>
+          <h4 style="margin-bottom:8px;font-size:14px">Chance Classification</h4>
+          <p style="font-size:13px;color:var(--text-lt)">Each college is classified as High Chance, Moderate, or Low — no guesswork.</p>
+        </div>
+        <div style="text-align:center;padding:24px;background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border)">
+          <div style="font-size:36px;margin-bottom:12px">💬</div>
+          <h4 style="margin-bottom:8px;font-size:14px">Expert Confirmation</h4>
+          <p style="font-size:13px;color:var(--text-lt)">WhatsApp EduTrack to validate your list with expert counsellor guidance.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div style="background:var(--amber-pale);border:1px solid #FDE68A;border-radius:var(--r-md);padding:18px 22px;margin-top:48px;display:flex;gap:12px;align-items:flex-start">
+      <span style="font-size:20px;flex-shrink:0">⚠️</span>
+      <p style="font-size:13px;color:#78350F;line-height:1.75"><strong>Disclaimer:</strong> This predictor uses historical closing rank data and is for guidance only. Actual cutoffs change every year based on number of applicants, seat matrix changes and round-specific dynamics. Always verify with EduTrack counsellors before finalising your choice list. <strong>Never rely solely on a predictor for choice filling decisions.</strong></p>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script>
+/* ── PREDICTOR DATA (representative 3-yr averages from public MCC/state data) ── */
+const UG_DATA = [
+  /* Government MBBS – AIQ */
+  { name:"AIIMS New Delhi",        type:"ug", quota:"aiq", state:"dl",  govtType:"central", course:"MBBS", closing_gen:50,     closing_obc:150,    closing_sc:600,    closing_st:1200,   closing_ews:200  },
+  { name:"AIIMS Bhopal",           type:"ug", quota:"aiq", state:"mp",  govtType:"central", course:"MBBS", closing_gen:800,    closing_obc:2000,   closing_sc:5000,   closing_st:9000,   closing_ews:1200 },
+  { name:"AIIMS Bibinagar",        type:"ug", quota:"aiq", state:"other",govtType:"central", course:"MBBS", closing_gen:2500,   closing_obc:6000,   closing_sc:12000,  closing_st:22000,  closing_ews:3500 },
+  { name:"JIPMER Puducherry",      type:"ug", quota:"aiq", state:"tn",  govtType:"central", course:"MBBS", closing_gen:800,    closing_obc:2200,   closing_sc:6000,   closing_st:11000,  closing_ews:1400 },
+  { name:"Grant Medical College Mumbai", type:"ug", quota:"state", state:"mh", govtType:"govt", course:"MBBS", closing_gen:2800, closing_obc:8000, closing_sc:18000, closing_st:30000, closing_ews:4000 },
+  { name:"Govt Medical College Nagpur",  type:"ug", quota:"state", state:"mh", govtType:"govt", course:"MBBS", closing_gen:6000, closing_obc:14000,closing_sc:28000, closing_st:50000, closing_ews:8000 },
+  { name:"BJ Medical College Pune",      type:"ug", quota:"state", state:"mh", govtType:"govt", course:"MBBS", closing_gen:3500, closing_obc:9000, closing_sc:20000, closing_st:35000, closing_ews:5000 },
+  { name:"BRD Medical Gorakhpur",        type:"ug", quota:"state", state:"up", govtType:"govt", course:"MBBS", closing_gen:15000,closing_obc:35000,closing_sc:60000, closing_st:90000, closing_ews:20000},
+  { name:"GSVM Medical Kanpur",          type:"ug", quota:"state", state:"up", govtType:"govt", course:"MBBS", closing_gen:12000,closing_obc:28000,closing_sc:55000, closing_st:85000, closing_ews:16000},
+  { name:"Maulana Azad Medical Delhi",   type:"ug", quota:"state", state:"dl", govtType:"govt", course:"MBBS", closing_gen:1200, closing_obc:3500, closing_sc:8000,  closing_st:15000, closing_ews:1800 },
+  { name:"KGMU Lucknow",                 type:"ug", quota:"aiq",   state:"up", govtType:"govt", course:"MBBS", closing_gen:5000, closing_obc:12000,closing_sc:25000, closing_st:45000, closing_ews:7000 },
+  { name:"SMIMER Surat",                 type:"ug", quota:"state", state:"gj", govtType:"govt", course:"MBBS", closing_gen:20000,closing_obc:45000,closing_sc:75000, closing_st:110000,closing_ews:28000},
+  { name:"MS Ramaiah Bangalore",         type:"ug", quota:"aiq",   state:"ka", govtType:"private",course:"MBBS",closing_gen:40000,closing_obc:75000,closing_sc:110000,closing_st:150000,closing_ews:55000},
+  { name:"Kasturba Medical Manipal",     type:"ug", quota:"aiq",   state:"ka", govtType:"private",course:"MBBS",closing_gen:50000,closing_obc:90000,closing_sc:130000,closing_st:180000,closing_ews:65000},
+  { name:"SSPM Sindhudurg",              type:"ug", quota:"state", state:"mh", govtType:"private",course:"MBBS",closing_gen:90000,closing_obc:150000,closing_sc:200000,closing_st:280000,closing_ews:110000},
+  { name:"Vedanta Institute Palghar",    type:"ug", quota:"state", state:"mh", govtType:"private",course:"MBBS",closing_gen:120000,closing_obc:190000,closing_sc:250000,closing_st:320000,closing_ews:140000},
+  { name:"Prasad Institute Lucknow",     type:"ug", quota:"state", state:"up", govtType:"private",course:"MBBS",closing_gen:130000,closing_obc:200000,closing_sc:260000,closing_st:340000,closing_ews:150000},
+  { name:"Teerthankar Mahavir Moradabad",type:"ug", quota:"state", state:"up", govtType:"private",course:"MBBS",closing_gen:140000,closing_obc:210000,closing_sc:270000,closing_st:360000,closing_ews:160000},
+  /* BDS */
+  { name:"Govt Dental College Mumbai",   type:"ug", quota:"state", state:"mh", govtType:"govt", course:"BDS",  closing_gen:80000, closing_obc:160000,closing_sc:240000,closing_st:350000,closing_ews:100000},
+  { name:"Govt Dental College Nagpur",   type:"ug", quota:"state", state:"mh", govtType:"govt", course:"BDS",  closing_gen:120000,closing_obc:200000,closing_sc:290000,closing_st:400000,closing_ews:140000},
+  /* AYUSH */
+  { name:"Govt Ayurvedic College Nagpur",type:"ug", quota:"state", state:"mh", govtType:"govt", course:"BAMS", closing_gen:250000,closing_obc:400000,closing_sc:500000,closing_st:600000,closing_ews:300000},
+];
+
+const PG_DATA = [
+  { name:"AIIMS New Delhi — MD General Medicine",  type:"pg", quota:"aiq",  course:"MD General Medicine",  closing_gen:200,   closing_obc:600,   closing_sc:2000,  closing_st:5000  },
+  { name:"AIIMS New Delhi — MS Orthopaedics",      type:"pg", quota:"aiq",  course:"MS Orthopaedics",      closing_gen:350,   closing_obc:900,   closing_sc:3000,  closing_st:7000  },
+  { name:"PGIMER Chandigarh — MD Paediatrics",     type:"pg", quota:"aiq",  course:"MD Paediatrics",       closing_gen:500,   closing_obc:1500,  closing_sc:4500,  closing_st:9000  },
+  { name:"JIPMER — MD General Medicine",           type:"pg", quota:"aiq",  course:"MD General Medicine",  closing_gen:800,   closing_obc:2000,  closing_sc:5500,  closing_st:11000 },
+  { name:"GMCH Nagpur — MD General Medicine",      type:"pg", quota:"state",course:"MD General Medicine",  closing_gen:5000,  closing_obc:12000, closing_sc:22000, closing_st:40000 },
+  { name:"BJ Medical Pune — MS OBG",               type:"pg", quota:"state",course:"MS OBG",               closing_gen:3000,  closing_obc:8000,  closing_sc:16000, closing_st:30000 },
+  { name:"KEM Hospital Mumbai — MD Paediatrics",   type:"pg", quota:"state",course:"MD Paediatrics",       closing_gen:2500,  closing_obc:7000,  closing_sc:14000, closing_st:27000 },
+  { name:"KGMU Lucknow — MD Radiology",            type:"pg", quota:"aiq",  course:"MD Radiology",         closing_gen:800,   closing_obc:2200,  closing_sc:6000,  closing_st:12000 },
+  { name:"Govt Medical Nagpur — MD Psychiatry",    type:"pg", quota:"state",course:"MD Psychiatry",        closing_gen:18000, closing_obc:40000, closing_sc:65000, closing_st:95000 },
+  { name:"Grant Medical Mumbai — MS General Surg", type:"pg", quota:"state",course:"MS General Surgery",   closing_gen:4000,  closing_obc:10000, closing_sc:20000, closing_st:38000 },
+  { name:"MS Ramaiah — MD Dermatology",            type:"pg", quota:"aiq",  course:"MD Dermatology",       closing_gen:1200,  closing_obc:3000,  closing_sc:8000,  closing_st:15000 },
+  { name:"GMCH Nagpur — MD Anaesthesia",           type:"pg", quota:"state",course:"MD Anaesthesia",       closing_gen:22000, closing_obc:48000, closing_sc:78000, closing_st:115000},
+  { name:"Maulana Azad Delhi — MS ENT",            type:"pg", quota:"state",course:"MS ENT",               closing_gen:6000,  closing_obc:15000, closing_sc:28000, closing_st:52000 },
+  { name:"MH PG Seat — MD OBG",                   type:"pg", quota:"state",course:"MD OBG",               closing_gen:8000,  closing_obc:18000, closing_sc:35000, closing_st:60000 },
+];
+
+const CAT_MAP = { general:'closing_gen', obc:'closing_obc', sc:'closing_sc', st:'closing_st', ews:'closing_ews', pwd:'closing_sc' };
+
+function runPredictor() {
+  const rank     = parseInt(document.getElementById('pRank').value);
+  const exam     = document.getElementById('pExam').value;
+  const cat      = document.getElementById('pCategory').value;
+  const state    = document.getElementById('pState').value;
+  const quota    = document.getElementById('pQuota').value;
+  const rankKey  = CAT_MAP[cat] || 'closing_gen';
+
+  if (!rank || rank < 1) { showToast('Please enter your NEET rank first.','error'); return; }
+
+  const dataset = exam === 'ug' ? UG_DATA : PG_DATA;
+  const results = [];
+
+  dataset.forEach(col => {
+    /* Quota filter */
+    if (quota === 'aiq'   && col.quota !== 'aiq')   return;
+    if (quota === 'state' && col.quota !== 'state')  return;
+    /* State filter for state quota */
+    if (col.quota === 'state' && col.state && col.state !== 'other' && col.state !== state) return;
+
+    const closing = col[rankKey] || col.closing_gen;
+    let chance;
+    if      (rank <= closing * 0.80) chance = 'high';
+    else if (rank <= closing * 1.10) chance = 'medium';
+    else if (rank <= closing * 1.35) chance = 'low';
+    else return; /* too far off, skip */
+
+    results.push({ ...col, closing, chance });
+  });
+
+  results.sort((a,b) => a.closing - b.closing);
+  renderResults(results, rank, exam, cat);
+}
+
+function renderResults(results, rank, exam, cat) {
+  const box = document.getElementById('predResults');
+  if (!results.length) {
+    box.innerHTML = `<div class="pred-empty"><div class="icon">😔</div><h4>No matching colleges found for your inputs</h4><p style="font-size:13px;color:var(--text-lt);margin-top:8px">Try adjusting your quota preference or contact EduTrack for personalised guidance.</p><button onclick="waQuick('College predictor — no results for my rank, need guidance')" class="btn btn-wa" style="margin-top:16px">💬 Get Help on WhatsApp</button></div>`;
+    return;
+  }
+
+  const high   = results.filter(r=>r.chance==='high');
+  const medium = results.filter(r=>r.chance==='medium');
+  const low    = results.filter(r=>r.chance==='low');
+
+  let html = `<p class="result-count">Showing <strong>${results.length} colleges</strong> for Rank <strong>${rank.toLocaleString()}</strong> · ${cat.toUpperCase()} · ${exam.toUpperCase()}</p>`;
+  html += `<div class="filter-row"><span style="font-size:13px;font-weight:700;color:var(--text-mid)">Filter:</span><select onchange="filterResults(this.value)" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600"><option value="all">All (${results.length})</option><option value="high">High Chance (${high.length})</option><option value="medium">Moderate (${medium.length})</option><option value="low">Low Chance (${low.length})</option></select></div>`;
+  html += `<div id="predList">`;
+  if (high.length)   { html += `<div class="pred-section-title">✅ High Chance — Your rank is comfortably within range</div>`; high.forEach(c=>html+=renderCard(c)); }
+  if (medium.length) { html += `<div class="pred-section-title">🎯 Moderate — Your rank is close to the cutoff</div>`; medium.forEach(c=>html+=renderCard(c)); }
+  if (low.length)    { html += `<div class="pred-section-title">⚡ Low Chance — Worth trying if it's your dream college</div>`; low.forEach(c=>html+=renderCard(c)); }
+  html += `</div>`;
+  html += `<div class="wa-cta-inline"><p>💡 <strong>Want EduTrack to build your complete choice list?</strong><br>Our counsellors validate these results with latest round data and create your optimal preference list.</p><button onclick="waQuick('College predictor done — need expert validation of my choice list for rank ${rank}')" class="btn btn-primary">📋 Get Expert Choice List →</button></div>`;
+  box.innerHTML = html;
+}
+
+function renderCard(c) {
+  const chanceLabel = c.chance==='high' ? 'HIGH' : c.chance==='medium' ? 'MOD' : 'LOW';
+  const govtLabel   = (c.govtType||'').toLowerCase().includes('govt') ? '🏛️ Govt' : (c.govtType||'').toLowerCase().includes('central') ? '⭐ Central' : '🏥 Private';
+  const quotaLabel  = c.quota === 'aiq' ? 'AIQ' : 'State';
+  return `<div class="pred-result-card">
+    <div class="pred-chance ${c.chance}">${chanceLabel}</div>
+    <div style="flex:1">
+      <div class="pred-col-name">${c.name}</div>
+      <div class="pred-col-meta">${c.course || ''} &nbsp;·&nbsp; ${govtLabel} &nbsp;·&nbsp; ${quotaLabel}</div>
+      <div class="pred-col-rank">Avg closing rank: ${(c.closing||0).toLocaleString()}</div>
+    </div>
+    <button onclick="waQuick('Interested in ${c.name} — need guidance')" class="btn btn-wa btn-sm">💬</button>
+  </div>`;
+}
+
+function filterResults(filter) {
+  document.querySelectorAll('.pred-result-card').forEach(card => {
+    const chance = card.querySelector('.pred-chance');
+    if (!chance) return;
+    const cls = chance.className.includes('high') ? 'high' : chance.className.includes('medium') ? 'medium' : 'low';
+    card.style.display = (filter==='all' || filter===cls) ? '' : 'none';
+  });
+  document.querySelectorAll('.pred-section-title').forEach(t => t.style.display = '');
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Allow access if admin session exists OR if student is logged in (for dashboard link)
+  // Also check localStorage flag set when counsellor logs in (works across tabs)
+  // ADMIN / COUNSELLOR ONLY — students are NOT allowed
+  var isAdmin = ET.isAdmin() || !!localStorage.getItem('et_admin_active');
+  if (!isAdmin) {
+    // Block completely — hide all page content, show gate
+    document.getElementById('loginGate').style.display = 'flex';
+    document.querySelectorAll('section, .tool-hero, .page-hero').forEach(function(el) {
+      el.style.display = 'none';
+    });
+    // Also hide nav announce and topbar so page looks like a clean gate
+    ['announce','topbar','site-nav','site-footer'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.style.display = 'none';
+    });
+  } else {
+    ET.updateNav();
+  }
+});
+</script>
+
+<script src="js/auth.js"></script>
+<script src="js/components.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

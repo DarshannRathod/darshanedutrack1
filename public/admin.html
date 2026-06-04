@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Counsellor Admin Panel | EduTrack Education Solution</title>
+<link rel="apple-touch-icon" href="edutrack-logo.jpg">
+<link rel="icon" type="image/jpeg" href="edutrack-logo.jpg">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* ── AUTH ── */
+.auth-page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.auth-left{background:linear-gradient(105deg,rgba(42,10,8,.91) 0%,rgba(42,10,8,.80) 50%,rgba(42,10,8,.55) 100%),url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=80') center 30%/cover no-repeat;display:flex;flex-direction:column;justify-content:space-between;padding:48px}
+.auth-left .brand-logo{height:60px}
+.auth-left h2{font-family:var(--font-h);font-size:clamp(22px,3vw,34px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:14px}
+.auth-left h2 em{color:var(--amber-lt);font-style:normal}
+.auth-left p{color:rgba(255,255,255,.68);font-size:15px;line-height:1.75;margin-bottom:22px}
+.auth-feat{display:flex;align-items:center;gap:12px;margin-bottom:11px;color:rgba(255,255,255,.82);font-size:14px}
+.auth-feat-ic{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.auth-left-foot{color:rgba(255,255,255,.3);font-size:12px;margin-top:20px}
+.auth-right{display:flex;align-items:center;justify-content:center;padding:48px 40px;overflow-y:auto}
+.auth-box{width:100%;max-width:440px}
+.auth-step{display:none}
+.auth-step.active{display:block}
+.login-method-tabs{display:flex;gap:0;border-radius:var(--r-md);overflow:hidden;border:2px solid var(--border);margin-bottom:22px}
+.lmt{flex:1;padding:11px;text-align:center;font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--text-lt);background:var(--white);cursor:pointer;border:none;transition:all .2s}
+.lmt.active{background:linear-gradient(135deg,var(--violet),var(--teal));color:#fff}
+.login-panel{display:none}.login-panel.active{display:block}
+.otp-row{display:flex;gap:8px;justify-content:center;margin:16px 0 20px}
+.otp-row input{width:50px;height:54px;border-radius:var(--r-sm);border:2px solid var(--border);text-align:center;font-family:var(--font-h);font-size:22px;font-weight:900;outline:none;transition:all .2s}
+.otp-row input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(212,32,38,.1)}
+.otp-row input.done{border-color:var(--teal);background:var(--teal-pale)}
+.msg-err,.msg-ok{border-radius:var(--r-sm);padding:11px 14px;font-size:13px;font-weight:600;margin-bottom:14px;display:none;align-items:center;gap:8px}
+.msg-err.on{display:flex;background:#FEF2F2;border:1.5px solid #FECACA;color:#B91C1C}
+.msg-ok.on{display:flex;background:var(--teal-pale);border:1.5px solid var(--teal-pale2);color:var(--text-mid)}
+.otp-notice{background:linear-gradient(135deg,var(--teal-pale),var(--violet-pale));border:1.5px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;font-size:13px;color:var(--text-mid);margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.timer-row{font-size:12px;color:var(--text-lt);text-align:center;margin-top:8px}
+.btn-spin{pointer-events:none;opacity:.8}
+.btn-spin::after{content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── DASHBOARD ── */
+.admin-layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.admin-sb{background:linear-gradient(160deg,#1A0604,#2C0A04);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo img{height:50px}
+.sb-logo-sub{color:rgba(255,255,255,.32);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-top:5px}
+.sb-user{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+.sb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-name{color:#fff;font-size:13px;font-weight:700}
+.sb-role{color:rgba(255,255,255,.38);font-size:11px}
+.sb-super-badge{background:rgba(245,168,35,.25);color:var(--amber-lt);font-size:10px;font-weight:800;padding:1px 7px;border-radius:20px;margin-top:3px;display:inline-block}
+.admin-nav{flex:1;padding:8px 0}
+.admin-nav a,.admin-nav button{display:flex;align-items:center;gap:10px;padding:11px 20px;color:rgba(255,255,255,.58);font-size:13px;font-weight:600;transition:all .18s;border-left:3px solid transparent;text-decoration:none;background:none;border-top:none;border-right:none;border-bottom:none;cursor:pointer;width:100%;text-align:left}
+.admin-nav a:hover,.admin-nav a.on,.admin-nav button:hover,.admin-nav button.on{color:#fff;background:rgba(255,255,255,.07);border-left-color:var(--violet)}
+.admin-nav .sh{padding:14px 20px 4px;font-size:10px;font-weight:800;color:rgba(255,255,255,.22);letter-spacing:1.5px;text-transform:uppercase}
+.admin-nav .super-only{display:none}
+.admin-nav .super-only.visible{display:flex}
+.sb-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.07)}
+.admin-main{background:var(--surface);display:flex;flex-direction:column}
+.admin-topbar{background:var(--white);border-bottom:2px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--sh-sm);flex-shrink:0}
+.topbar-title{font-family:var(--font-h);font-size:18px;font-weight:800;color:var(--text)}
+.admin-content{padding:28px 32px;flex:1}
+.apanel{display:none}
+.apanel.on{display:block}
+
+/* ── STATS ── */
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.astat{background:var(--white);border-radius:var(--r-lg);border:2px solid var(--border);padding:20px;position:relative;overflow:hidden}
+.astat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--teal))}
+.astat-num{font-family:var(--font-h);font-size:34px;font-weight:900;color:var(--violet);line-height:1;margin-bottom:5px}
+.astat-lbl{font-size:11px;font-weight:700;color:var(--text-lt);text-transform:uppercase;letter-spacing:.4px}
+
+/* ── TABLES ── */
+.tcard{background:var(--white);border-radius:var(--r-lg);border:2px solid var(--border);overflow:hidden;box-shadow:var(--sh-sm)}
+.tcard-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.tcard-head h4{margin:0;font-size:15px}
+.twrap{overflow-x:auto}
+table.atable{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
+table.atable th{background:linear-gradient(135deg,var(--violet),var(--teal));color:#fff;padding:11px 13px;text-align:left;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+table.atable td{padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text-mid)}
+table.atable tr:hover td{background:var(--violet-pale)}
+table.atable tr:last-child td{border-bottom:none}
+.sbadge{font-size:11px;font-weight:800;padding:3px 10px;border-radius:var(--r-pill)}
+.sbadge.s{background:#F0FDF4;color:#166534}
+.sbadge.p{background:#FFFBEB;color:#92400E}
+.sbadge.super{background:rgba(245,168,35,.2);color:#7C4A00}
+.sbadge.active{background:#F0FDF4;color:#166534}
+.sbadge.inactive{background:#FEF2F2;color:#B91C1C}
+.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.asearch{flex:1;min-width:200px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--r-md);font-size:14px;outline:none;font-family:var(--font-b)}
+.asearch:focus{border-color:var(--violet)}
+.asel{padding:10px 14px;border:2px solid var(--border);border-radius:var(--r-md);font-size:13px;background:var(--white);cursor:pointer;outline:none;font-family:var(--font-b)}
+
+/* ── COUNSELLOR MANAGEMENT ── */
+.c-card{background:var(--white);border:2px solid var(--border);border-radius:var(--r-lg);padding:22px;margin-bottom:12px;display:flex;align-items:center;gap:16px;transition:all .2s}
+.c-card:hover{border-color:var(--border-dk)}
+.c-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
+.c-info{flex:1;min-width:0}
+.c-name{font-family:var(--font-h);font-size:15px;font-weight:800;color:var(--text)}
+.c-email{font-size:12px;color:var(--text-lt);margin-top:2px}
+.c-meta{font-size:11px;color:var(--text-xlt);margin-top:3px}
+.c-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
+/* ── ADD COUNSELLOR FORM ── */
+.add-c-form{background:var(--white);border:2px solid var(--border);border-radius:var(--r-lg);padding:28px;margin-bottom:20px}
+.add-c-form h4{margin-bottom:16px;font-size:16px;display:flex;align-items:center;gap:8px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.pass-strength{height:4px;border-radius:2px;margin-top:5px;transition:all .3s;background:var(--border)}
+.pass-strength.w{background:#F59E0B;width:33%}
+.pass-strength.m{background:#D97706;width:66%}
+.pass-strength.s{background:#059669;width:100%}
+
+/* ── CHOICE LIST MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal-bx{background:var(--white);border-radius:var(--r-xl);padding:32px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.3)}
+.modal-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:16px}
+.modal-close{font-size:22px;cursor:pointer;color:var(--text-lt);transition:color .2s;background:none;border:none;flex-shrink:0;margin-left:12px}
+.modal-close:hover{color:var(--violet)}
+.cl-row{display:grid;grid-template-columns:22px 28px 1fr 110px 80px 80px 28px;gap:6px;align-items:center;padding:6px 8px;border:1.5px solid var(--border);border-radius:var(--r-sm);margin-bottom:6px;background:var(--white);cursor:grab}
+.cl-row:hover{border-color:var(--border-dk);box-shadow:var(--sh-sm)}
+.cl-row.drag-over{border-color:var(--violet);background:var(--violet-pale)}
+.drag-handle{color:var(--text-xlt);font-size:14px;cursor:grab;user-select:none;text-align:center}
+.cl-seq{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--teal));color:#fff;font-family:var(--font-h);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cl-inp{padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;color:var(--text);outline:none;width:100%;font-family:var(--font-b);transition:border-color .18s}
+.cl-inp:focus{border-color:var(--violet)}
+.cl-sel{padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:13px;background:var(--white);cursor:pointer;width:100%;font-family:var(--font-b);outline:none}
+.cl-del{color:var(--text-xlt);background:none;border:none;font-size:18px;cursor:pointer;padding:0;line-height:1;transition:color .18s}
+.cl-del:hover{color:#DC2626}
+.add-row-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface);border:2px dashed var(--border);border-radius:var(--r-sm);font-size:13px;font-weight:700;color:var(--text-lt);cursor:pointer;transition:all .18s;margin-top:6px}
+.add-row-btn:hover{border-color:var(--violet);color:var(--violet);background:var(--violet-pale)}
+
+/* ── PICKER ── */
+.pick-banner{background:linear-gradient(135deg,var(--violet),var(--teal));color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-radius:var(--r-md);margin-bottom:16px}
+.pick-banner h4{margin:0;font-size:15px;font-weight:800}
+.pick-basket{background:var(--white);border:2px solid var(--border);border-radius:var(--r-lg);margin-bottom:16px;overflow:hidden}
+.pick-basket-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+.pick-basket-head h5{margin:0;font-size:13px;font-weight:800}
+.pick-list{padding:8px 16px;min-height:48px}
+.pick-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pick-item:last-child{border-bottom:none}
+.pick-seq{width:22px;height:22px;border-radius:50%;background:var(--violet);color:#fff;font-family:var(--font-h);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pick-name{flex:1;font-weight:600;color:var(--text)}
+.pick-meta{font-size:11px;color:var(--text-lt)}
+.pick-remove{background:none;border:none;color:var(--text-xlt);font-size:16px;cursor:pointer;padding:0 4px}
+.pick-remove:hover{color:#DC2626}
+.set-card{background:var(--white);border-radius:var(--r-lg);border:2px solid var(--border);padding:28px;margin-bottom:20px}
+
+@media(max-width:768px){
+  .auth-page{grid-template-columns:1fr}.auth-left{display:none}.auth-right{padding:32px 20px}
+  .admin-layout{grid-template-columns:1fr}.admin-sb{position:static;height:auto}
+  .admin-stats{grid-template-columns:1fr 1fr}.form-grid-3{grid-template-columns:1fr}
+  .cl-row{grid-template-columns:22px 28px 1fr 80px 28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH PAGE ══ -->
+<div id="authPage">
+<div class="auth-page">
+  <div class="auth-left">
+    <a href="index.html"><img src="edutrack-logo.jpg" alt="EduTrack" class="brand-logo"></a>
+    <div>
+      <h2>Counsellor <em>Admin Panel</em></h2>
+      <p>Secure OTP-verified or password login. Manage students, build personalised choice lists, and download PDFs.</p>
+      <div class="auth-feat"><div class="auth-feat-ic">👥</div> View &amp; manage all student registrations</div>
+      <div class="auth-feat"><div class="auth-feat-ic">🏛️</div> Browse 672+ colleges state-wise &amp; build choice lists</div>
+      <div class="auth-feat"><div class="auth-feat-ic">📋</div> Send sequenced, editable choice lists to students</div>
+      <div class="auth-feat"><div class="auth-feat-ic">👤</div> Super Admin can create multiple counsellors</div>
+      <div class="auth-feat"><div class="auth-feat-ic">📧</div> Real OTP delivery via EmailJS</div>
+    </div>
+    <div class="auth-left-foot">© 2026 EduTrack Education Solution, Nagpur</div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-box">
+      <div style="text-align:center;margin-bottom:22px">
+        <img src="edutrack-logo.jpg" alt="EduTrack" style="height:54px;margin:0 auto 10px;display:block">
+        <h3 style="font-family:var(--font-h);font-size:20px;font-weight:900;color:var(--text);margin-bottom:4px">Counsellor Login</h3>
+        <p style="font-size:13px;color:var(--text-lt)">OTP to email &nbsp;·&nbsp; or password login</p>
+      </div>
+
+      <div class="msg-err" id="authErr"><span>⚠️</span><span id="authErrT"></span></div>
+      <div class="msg-ok"  id="authOk"><span>✅</span><span id="authOkT"></span></div>
+
+      <!-- Login method tabs -->
+      <div class="login-method-tabs">
+        <button class="lmt active" onclick="switchLoginMethod('otp')">📧 OTP to Email</button>
+        <button class="lmt"        onclick="switchLoginMethod('pass')">🔑 Password Login</button>
+      </div>
+
+      <!-- OTP LOGIN -->
+      <div class="login-panel active" id="lpOtp">
+        <div class="auth-step active" id="otpS1">
+          <div class="field">
+            <label>Counsellor Email Address</label>
+            <input type="email" id="otpEmail" placeholder="counsellor@edutracksolution.co.in" autocomplete="email">
+          </div>
+          <button class="btn btn-primary" id="otpSendBtn" style="width:100%;justify-content:center;padding:14px;font-size:15px" onclick="otpStep1()">
+            Send OTP to Email →
+          </button>
+          <div style="margin-top:14px;padding:12px;background:var(--surface);border-radius:var(--r-md);border:1.5px solid var(--border);font-size:12px;color:var(--text-lt);line-height:1.65">
+            ⚙️ First time? Admin email: <strong id="cfgEmailHint">edutracksolution@gmail.com</strong><br>
+            Configure EmailJS in <strong>Admin → Settings</strong> to receive real OTPs.
+          </div>
+        </div>
+        <div class="auth-step" id="otpS2">
+          <div class="otp-notice"><span style="font-size:20px;flex-shrink:0">📧</span>
+            <div>OTP sent to <strong id="otpEmailPrev"></strong>.<br>
+            <span style="font-size:12px;color:var(--text-lt)">Check inbox &amp; spam · Valid 10 minutes</span></div>
+          </div>
+          <p style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Enter 6-digit OTP:</p>
+          <div class="otp-row" id="otpRow">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,0,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,1,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,2,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,3,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,4,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            <input type="text" maxlength="1" onkeyup="otpNav(this,5,'otpRow')" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="otpStep2()">✅ Verify &amp; Login</button>
+          <div class="timer-row" id="otpTimerDiv" style="display:none">Resend in <span id="otpTimerN">120</span>s</div>
+          <p style="text-align:center;margin-top:10px;font-size:12px">
+            <a href="#" id="otpResendLnk" style="color:var(--text-xlt);pointer-events:none" onclick="otpResend()">Resend OTP</a>
+            &nbsp;·&nbsp;<a href="#" onclick="otpBack()" style="color:var(--text-lt)">← Change email</a>
+          </p>
+        </div>
+      </div><!-- /lpOtp -->
+
+      <!-- PASSWORD LOGIN -->
+      <div class="login-panel" id="lpPass">
+        <div class="field"><label>Email Address</label><input type="email" id="passEmail" placeholder="your@email.com" autocomplete="email"></div>
+        <div class="field">
+          <label>Password</label>
+          <div style="position:relative">
+            <input type="password" id="passPassword" placeholder="Enter your password" style="width:100%;padding-right:44px" onkeydown="if(event.key==='Enter')passLogin()">
+            <button onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-lt);cursor:pointer;font-size:16px" id="passVisBtn">👁️</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:15px" onclick="passLogin()">🔑 Login with Password</button>
+        <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-lt)">Forgot password? Use OTP login instead.</p>
+      </div><!-- /lpPass -->
+
+      <p style="text-align:center;margin-top:18px;font-size:12px"><a href="index.html" style="color:var(--text-xlt)">← Back to website</a></p>
+    </div>
+  </div>
+</div>
+</div><!-- /authPage -->
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashPage" style="display:none">
+<div class="admin-layout">
+
+  <aside class="admin-sb">
+    <div class="sb-logo">
+      <img src="edutrack-logo.jpg" alt="EduTrack">
+      <div class="sb-logo-sub">Admin Panel</div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">A</div>
+      <div>
+        <div class="sb-name" id="sbName">Counsellor</div>
+        <div class="sb-role" id="sbRole">EduTrack Counsellor</div>
+        <div class="sb-super-badge" id="sbSuperBadge" style="display:none">⭐ Super Admin</div>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <div class="sh">Main</div>
+      <a href="#" onclick="gp('overview')" class="on" id="an-overview">📊 Overview</a>
+      <a href="#" onclick="gp('students')" id="an-students">👥 All Students</a>
+      <div class="sh">Choice Lists</div>
+      <a href="#" onclick="gp('choices')" id="an-choices">📋 Manage Choice Lists</a>
+      <a href="#" onclick="gp('picker')"  id="an-picker">🏛️ Browse Institutes</a>
+      <div class="sh">Counsellor Tools</div>
+      <a href="predictor.html" target="_blank">🔮 College Predictor</a>
+      <a href="rankpredictor.html" target="_blank">📊 Rank Predictor</a>
+      <a href="cutoff.html" target="_blank">📈 Cutoff Data</a>
+      <a href="#" onclick="gp('myprofile')" id="an-myprofile">👤 My Profile</a>
+      <div class="sh super-only" id="shSuperAdmin">Super Admin</div>
+      <a href="#" onclick="gp('counsellors')" id="an-counsellors" class="super-only" style="display:none">👤 Manage Counsellors</a>
+      <div class="sh">Data &amp; Logs</div>
+      <a href="#" onclick="gp('logs')"    id="an-logs">📋 Activity Logs</a>
+      <a href="#" onclick="gp('export')"   id="an-export">📥 Export Data</a>
+      <a href="#" onclick="gp('settings')" id="an-settings">⚙️ Settings</a>
+    </nav>
+    <div class="sb-foot">
+      <button class="btn btn-outline-vio btn-sm" style="width:100%;justify-content:center" onclick="ET.adminLogout()">🚪 Logout</button>
+      <p style="text-align:center;margin-top:8px;font-size:11px"><a href="index.html" style="color:rgba(255,255,255,.3)">← Website</a></p>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title" id="pageTitle">📊 Overview</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <span id="topEmail" style="font-size:12px;color:var(--text-lt)">Admin</span>
+        <button class="btn btn-outline-vio btn-sm" onclick="ET.adminLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- OVERVIEW -->
+      <div class="apanel on" id="ap-overview">
+        <div class="admin-stats">
+          <div class="astat"><div class="astat-num" id="stTotal">0</div><div class="astat-lbl">Total Students</div></div>
+          <div class="astat"><div class="astat-num" id="stToday">0</div><div class="astat-lbl">Today</div></div>
+          <div class="astat"><div class="astat-num" id="stCounsellors" style="color:var(--teal)">0</div><div class="astat-lbl">Counsellors</div></div>
+          <div class="astat"><div class="astat-num" id="stPend">0</div><div class="astat-lbl">Choice Pending</div></div>
+          <div class="astat"><div class="astat-num" id="stSent">0</div><div class="astat-lbl">Lists Sent</div></div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-head"><h4>Recent Registrations</h4><a href="#" onclick="gp('students')" style="font-size:13px;color:var(--violet);font-weight:700">View All →</a></div>
+          <div class="twrap"><table class="atable"><thead><tr><th>#</th><th>Name</th><th>Course</th><th>Score</th><th>AIR</th><th>State</th><th>Registered</th><th>Choice List</th></tr></thead><tbody id="recentTb"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ALL STUDENTS -->
+      <div class="apanel" id="ap-students">
+        <div class="frow">
+          <input class="asearch" id="stuQ" placeholder="🔍 Search name, email, mobile, city..." oninput="renderStudents()">
+          <select class="asel" id="stuCourse" onchange="renderStudents()"><option value="">All Courses</option><option>MBBS</option><option>BDS</option><option>BAMS</option><option>MD/MS</option><option>DNB</option></select>
+          <select class="asel" id="stuStatus" onchange="renderStudents()"><option value="">All Status</option><option value="pending">Pending</option><option value="sent">Sent</option></select>
+          <button onclick="exportCSV()" class="btn btn-outline-vio btn-sm">📥 CSV</button>
+        </div>
+        <div class="tcard">
+          <div class="twrap"><table class="atable"><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Mobile</th><th>City/State</th><th>Course</th><th>Score</th><th>AIR</th><th>Category</th><th>Registered</th><th>Actions</th></tr></thead><tbody id="stuTb"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- CHOICE LISTS -->
+      <div class="apanel" id="ap-choices">
+        <div style="background:linear-gradient(135deg,var(--violet-pale),var(--teal-pale));border:2px solid var(--border);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">
+          <span style="font-size:28px">📋</span>
+          <div><h4 style="margin-bottom:4px">Build &amp; Send Personalised Choice Lists</h4>
+          <p style="font-size:13px;color:var(--text-lt);margin:0">Click "Build" to open editor. Or use <a href="#" onclick="gp('picker')" style="color:var(--violet);font-weight:700">Browse Institutes</a> to pick from 672+ college database.</p></div>
+        </div>
+        <div class="tcard">
+          <div class="twrap"><table class="atable"><thead><tr><th>#</th><th>Student</th><th>Course</th><th>Score</th><th>AIR</th><th>Category</th><th>Domicile</th><th>Status</th><th>Actions</th></tr></thead><tbody id="choiceTb"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- BROWSE INSTITUTES PICKER -->
+      <div class="apanel" id="ap-picker">
+        <div class="pick-banner">
+          <div><h4>🏛️ State-wise College Database</h4><p id="pickerStudentName" style="margin:4px 0 0;font-size:13px;opacity:.85">Select a student, then check colleges to build their choice list</p></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="pickerStudentSel" class="asel" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25);min-width:200px" onchange="onPickerStudentChange()"><option value="">— Select Student —</option></select>
+            <button onclick="applyPickerToChoiceList()" class="btn" style="background:#fff;color:var(--violet);font-weight:800;padding:10px 18px">✅ Save to Choice List</button>
+          </div>
+        </div>
+        <div class="pick-basket" style="margin-bottom:16px">
+          <div class="pick-basket-head">
+            <h5>☑️ Selected Colleges <span id="pickerCount" style="font-size:12px;color:var(--text-lt);font-weight:600;margin-left:6px">0 selected</span></h5>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span style="font-size:11px;color:var(--text-lt)">Drag to reorder</span>
+              <button onclick="clearPicker()" class="btn btn-outline-vio btn-sm" style="padding:4px 12px;font-size:11px">Clear All</button>
+              <button onclick="applyPickerToChoiceList()" class="btn btn-primary btn-sm" style="padding:4px 12px;font-size:11px">✅ Save</button>
+            </div>
+          </div>
+          <div class="pick-list" id="pickerBasket"><p style="font-size:13px;color:var(--text-xlt);font-style:italic;padding:8px 0">No colleges selected — expand a state below and check boxes to add.</p></div>
+        </div>
+        <div class="tcard" style="margin-bottom:16px">
+          <div class="tcard-head" style="flex-wrap:wrap;gap:10px">
+            <input class="asearch" id="pickSearch" placeholder="🔍 Search college name or city across all states..." oninput="renderAllStateTables()" style="flex:1;min-width:200px">
+            <select class="asel" id="pickType" onchange="renderAllStateTables()"><option value="">All Types</option><option value="govt">Government</option><option value="private">Private</option><option value="deemed">Deemed</option></select>
+            <button onclick="deselectAll()" class="btn btn-outline-vio btn-sm">☐ Deselect All</button>
+          </div>
+          <div id="pickerResultCount" style="padding:8px 16px;font-size:12px;color:var(--text-lt);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface)">Loading...</div>
+        </div>
+        <div id="stateTablesContainer"></div>
+      </div>
+
+      <!-- MANAGE COUNSELLORS (Super Admin only) -->
+      <div class="apanel" id="ap-counsellors">
+        <!-- Add new counsellor -->
+        <div class="add-c-form" id="addCounsellorForm">
+          <h4>➕ Add New Counsellor</h4>
+          <div class="form-grid-3">
+            <div class="field"><label>Full Name *</label><input type="text" id="cName" placeholder="e.g. Priya Sharma"></div>
+            <div class="field"><label>Email Address *</label><input type="email" id="cEmail" placeholder="priya@edutracksolution.co.in"></div>
+            <div class="field"><label>Mobile Number</label><input type="tel" id="cMobile" placeholder="10-digit" maxlength="10"></div>
+            <div class="field">
+              <label>Password *</label>
+              <input type="password" id="cPassword" placeholder="Min 8 chars" oninput="checkPassStrength(this.value)">
+              <div class="pass-strength" id="passStrength"></div>
+              <div style="font-size:11px;color:var(--text-lt);margin-top:3px" id="passStrengthLabel"></div>
+            </div>
+            <div class="field"><label>Confirm Password *</label><input type="password" id="cPasswordConfirm" placeholder="Re-enter password"></div>
+            <div class="field"><label>Role</label>
+              <select id="cRole">
+                <option value="counsellor">Counsellor</option>
+                <option value="senior">Senior Counsellor</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap">
+            <button onclick="addCounsellor()" class="btn btn-primary">➕ Create Counsellor Account</button>
+            <button onclick="sendWelcomeOTP()" class="btn btn-outline-vio">📧 Send Welcome Email</button>
+            <div class="msg-err" id="cErr" style="flex:1;margin-bottom:0"><span>⚠️</span><span id="cErrT"></span></div>
+            <div class="msg-ok" id="cOk" style="flex:1;margin-bottom:0"><span>✅</span><span id="cOkT"></span></div>
+          </div>
+        </div>
+
+        <!-- Counsellors list -->
+        <div id="counsellorsList"></div>
+      </div>
+
+
+
+      <!-- COUNSELLOR SELF-EDIT PROFILE -->
+      <div class="apanel" id="ap-myprofile">
+        <div class="set-card" style="max-width:680px">
+          <h3 style="margin-bottom:6px">👤 My Profile</h3>
+          <p style="color:var(--text-lt);font-size:13px;margin-bottom:20px">Update your own counsellor details. Password change takes effect on next login.</p>
+          <div id="selfProfileMsg" style="display:none;margin-bottom:14px;padding:12px;border-radius:var(--r-sm);font-size:13px;font-weight:600"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" id="selfProfileForm">
+            <div class="field"><label>Full Name *</label><input type="text" id="spName" placeholder="Your name"></div>
+            <div class="field"><label>Mobile Number</label><input type="tel" id="spMobile" placeholder="10-digit" maxlength="10"></div>
+            <div class="field"><label>Email</label><input type="email" id="spEmail" placeholder="your@email.com" disabled style="opacity:.6;cursor:not-allowed"></div>
+            <div class="field"><label>Current Password (to change password)</label><input type="password" id="spOldPassword" placeholder="Enter current password"></div>
+            <div class="field"><label>New Password</label><input type="password" id="spNewPassword" placeholder="New password (leave blank to keep)"></div>
+            <div class="field"><label>Confirm New Password</label><input type="password" id="spNewPasswordConfirm" placeholder="Re-enter new password"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:18px">
+            <button onclick="saveSelfProfile()" class="btn btn-primary">💾 Save My Profile</button>
+            <button onclick="gp('overview')" class="btn btn-outline-vio">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY LOGS -->
+      <div class="apanel" id="ap-logs">
+        <div class="set-card" style="margin-bottom:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+            <div><h3 style="margin-bottom:4px">📋 Complete Activity Logs</h3><p style="color:var(--text-lt);font-size:13px">All student and counsellor actions tracked in real time.</p></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button onclick="exportLogs()" class="btn btn-outline-vio btn-sm">📥 Export CSV</button>
+              <button onclick="if(confirm('Clear all logs?'))LOGS.clear(),renderLogs()" class="btn btn-sm" style="background:#FEF2F2;color:var(--violet);border:1.5px solid #FECACA">🗑 Clear Logs</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+            <input class="asearch" id="logQ" placeholder="🔍 Search logs..." oninput="renderLogs()" style="flex:1;min-width:200px">
+            <select class="asel" id="logType" onchange="renderLogs()">
+              <option value="">All Types</option>
+              <option value="student">Students</option>
+              <option value="counsellor">Counsellors</option>
+              <option value="admin">Admin Actions</option>
+            </select>
+            <select class="asel" id="logAction" onchange="renderLogs()">
+              <option value="">All Actions</option>
+              <option value="login">Logins</option>
+              <option value="register">Registrations</option>
+              <option value="profile_updated">Profile Updates</option>
+              <option value="choice_list_sent">Choice Lists Sent</option>
+              <option value="created">Created</option>
+              <option value="deleted">Deleted</option>
+            </select>
+            <input type="date" class="asel" id="logDate" onchange="renderLogs()" style="min-width:150px">
+          </div>
+          <div class="tcard">
+            <div class="twrap">
+              <table class="atable"><thead><tr><th>Time</th><th>Actor</th><th>Role</th><th>Target</th><th>Action</th><th>Detail</th></tr></thead>
+              <tbody id="logsTb"></tbody>
+            </table></div>
+          </div>
+          <div id="logPagination" style="display:flex;gap:8px;justify-content:center;margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- EXPORT -->
+      <div class="apanel" id="ap-export">
+        <div class="set-card">
+          <h3 style="margin-bottom:8px">📥 Export Student Database</h3>
+          <p style="color:var(--text-lt);margin-bottom:22px">Download all student registrations as CSV or JSON.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button onclick="exportCSV()" class="btn btn-primary">📊 Download CSV</button>
+            <button onclick="exportJSON()" class="btn btn-outline-vio">📄 Download JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="apanel" id="ap-settings">
+        <div class="set-card" style="margin-bottom:20px">
+          <h3 style="margin-bottom:6px">📧 EmailJS OTP Configuration</h3>
+          <p style="color:var(--text-lt);font-size:14px;margin-bottom:18px">Configure real-time OTP email delivery for students and counsellors.</p>
+          <div style="background:linear-gradient(135deg,var(--violet-pale),var(--teal-pale));border:2px solid var(--border);border-radius:var(--r-md);padding:18px;margin-bottom:20px">
+            <h4 style="margin-bottom:12px;color:var(--violet)">📋 Setup Steps (5 minutes)</h4>
+            <ol style="color:var(--text-mid);font-size:14px;line-height:2.2;padding-left:20px">
+              <li>Go to <a href="https://emailjs.com" target="_blank" style="color:var(--violet);font-weight:700">emailjs.com</a> → Sign up free (200 OTPs/month)</li>
+              <li>Add Email Service → connect Gmail (edutracksolution@gmail.com)</li>
+              <li>Create <strong>two templates</strong> — one for Counsellors, one for Students</li>
+              <li>Template variables: <code style="background:var(--surface);padding:2px 7px;border-radius:4px;color:var(--violet)">{{otp}}</code> <code style="background:var(--surface);padding:2px 7px;border-radius:4px;color:var(--violet)">{{to_email}}</code> <code style="background:var(--surface);padding:2px 7px;border-radius:4px;color:var(--violet)">{{user_name}}</code> <code style="background:var(--surface);padding:2px 7px;border-radius:4px;color:var(--violet)">{{expiry}}</code></li>
+              <li>Account → General → copy <strong>Public Key</strong> · paste below → Save</li>
+            </ol>
+          </div>
+          <details style="margin-bottom:18px">
+            <summary style="cursor:pointer;font-weight:700;color:var(--violet);font-size:14px;padding:8px 0">📄 Sample Email Template (click to expand)</summary>
+            <pre style="background:#1a0604;color:#ccc;border-radius:var(--r-md);padding:14px;margin-top:10px;font-size:12px;overflow-x:auto;white-space:pre-wrap">Subject: Your EduTrack OTP — {{otp}}
+
+Hello {{user_name}},
+
+Your One-Time Password for EduTrack Education Solution:
+
+  OTP: {{otp}}
+
+Valid for: {{expiry}}
+Do not share this OTP with anyone.
+
+EduTrack Education Solution
+📞 8484098904 | edutracksolution.co.in</pre>
+          </details>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="field"><label>EmailJS Public Key *</label><input type="text" id="cfgPubkey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
+            <div class="field"><label>Service ID *</label><input type="text" id="cfgService" placeholder="e.g. service_abc123"></div>
+            <div class="field"><label>Counsellor OTP Template ID *</label><input type="text" id="cfgTplAdmin" placeholder="e.g. template_admin123"></div>
+            <div class="field"><label>Student OTP Template ID *</label><input type="text" id="cfgTplStudent" placeholder="e.g. template_student456"></div>
+            <div class="field"><label>Notification Template ID <small style="font-weight:400;color:var(--text-lt)">(optional - for profile update emails)</small></label><input type="text" id="cfgTplNotify" placeholder="e.g. template_notify789"></div>
+          </div>
+          <div class="field" style="margin-top:12px"><label>Super Admin Email (receives login OTP) *</label><input type="email" id="cfgAdminEmail" placeholder="edutracksolution@gmail.com"></div>
+          <div class="field" style="margin-top:12px">
+            <label>Super Admin Password (for password login)</label>
+            <input type="password" id="cfgSuperPass" placeholder="Set a strong password">
+            <div style="font-size:11px;color:var(--text-lt);margin-top:4px">This password lets the super admin login without OTP if needed.</div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button 
+        <!-- ══ FIREBASE CONFIG ══ -->
+        <div class="set-card" style="margin-bottom:20px">
+          <h3 style="margin-bottom:6px">🔥 Firebase Database — Multi-Device Sync</h3>
+          <p style="color:var(--text-lt);font-size:14px;margin-bottom:6px">
+            Connect Firebase Firestore so <strong>all counsellors and admins see the same data</strong> across every browser and device. Free tier is sufficient.
+          </p>
+          <div style="background:#FFF8E8;border:2px solid #FDE68A;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:#92400E;line-height:1.7">
+            <strong>⚙️ Setup (5 minutes):</strong><br>
+            1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--violet);font-weight:700">console.firebase.google.com</a> → Create a project<br>
+            2. Add a <strong>Web App</strong> → copy the <code>firebaseConfig</code> values below<br>
+            3. Go to <strong>Firestore Database</strong> → Create database → <strong>Start in Test Mode</strong><br>
+            4. Paste the values below and click <strong>Save Firebase Config</strong><br>
+            5. Click <strong>Migrate Local → Firebase</strong> to push existing data to cloud
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="field"><label>API Key</label><input type="text" id="fbApiKey" placeholder="AIzaSy..."></div>
+            <div class="field"><label>Auth Domain</label><input type="text" id="fbAuthDomain" placeholder="your-project.firebaseapp.com"></div>
+            <div class="field"><label>Project ID *</label><input type="text" id="fbProjectId" placeholder="your-project-id"></div>
+            <div class="field"><label>Storage Bucket</label><input type="text" id="fbStorageBucket" placeholder="your-project.appspot.com"></div>
+            <div class="field"><label>Messaging Sender ID</label><input type="text" id="fbMsgSenderId" placeholder="123456789012"></div>
+            <div class="field"><label>App ID</label><input type="text" id="fbAppId" placeholder="1:123456:web:abc123"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button onclick="saveFirebaseConfig()" class="btn btn-primary">🔥 Save Firebase Config</button>
+            <button onclick="testFirebaseConnection()" class="btn btn-outline-vio">🧪 Test Connection</button>
+            <button onclick="migrateToFirebase()" class="btn btn-outline-vio" style="background:#FFF8E8;border-color:#FDE68A;color:#92400E">📤 Migrate Local → Firebase</button>
+            <button onclick="syncFromFirebase()" class="btn btn-outline-vio" style="background:#F0FDF4;border-color:#A7F3D0;color:#059669">📥 Sync Firebase → Local</button>
+          </div>
+          <div id="fbMsg" style="display:none;margin-top:12px;padding:12px;border-radius:8px;font-size:13px;font-weight:600"></div>
+          <div id="fbStatus" style="margin-top:12px;font-size:12px;color:var(--text-lt)"></div>
+        </div>
+
+onclick="saveSettings()" class="btn btn-primary">💾 Save All Settings</button>
+            <button onclick="testOTP()" class="btn btn-outline-vio">🧪 Test OTP to Admin Email</button>
+          </div>
+          <div class="msg-ok" id="settingsMsg" style="margin-top:12px;border:1.5px solid #BBF7D0;border-radius:var(--r-sm);padding:10px 14px;font-size:13px;display:none"></div>
+          <div class="msg-err" id="settingsErr" style="margin-top:12px;display:none"><span>⚠️</span><span id="settingsErrT"></span></div>
+        </div>
+        <div class="set-card">
+          <h3 style="margin-bottom:6px">💬 WhatsApp Integration</h3>
+          <p style="color:var(--text-lt);font-size:14px;margin-bottom:16px">Context-aware pre-filled WhatsApp messages are live on all pages.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:14px">
+              <h5 style="margin-bottom:8px;font-size:13px">✅ Active Links</h5>
+              <div style="font-size:12px;color:var(--text-lt);line-height:2">Float button · Mobile bar · Contact form · Registration notify · Choice list share · College enquiry</div>
+            </div>
+            <div style="background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:14px">
+              <h5 style="margin-bottom:8px;font-size:13px">📱 Number: +91 8484098904</h5>
+              <div style="font-size:12px;color:var(--text-lt);line-height:2">Install WhatsApp Business · Set greeting message · Enable quick replies</div>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <a href="https://wa.me/918484098904" target="_blank" class="btn btn-wa btn-sm">💬 Test WhatsApp Link</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<!-- EDIT STUDENT MODAL (Admin) -->
+<div class="modal-bg" id="editStuModal">
+  <div class="modal-bx" style="max-width:700px">
+    <div class="modal-hd">
+      <div><h3 style="font-size:18px;margin-bottom:4px">✏️ Edit Student Details</h3><p id="editStuInfo" style="font-size:13px;color:var(--text-lt);margin:0"></p></div>
+      <button class="modal-close" onclick="closeEditStu()">✕</button>
+    </div>
+    <input type="hidden" id="editStuId">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="field"><label>Full Name *</label><input type="text" id="esName" placeholder="Student name"></div>
+      <div class="field"><label>Email Address</label><input type="email" id="esEmail" placeholder="email@example.com"></div>
+      <div class="field"><label>Mobile Number</label><input type="tel" id="esMobile" placeholder="10-digit" maxlength="10"></div>
+      <div class="field"><label>City</label><input type="text" id="esCity" placeholder="City"></div>
+      <div class="field"><label>State</label><input type="text" id="esState" placeholder="State"></div>
+      <div class="field"><label>Course</label>
+        <select id="esCourse"><option>MBBS</option><option>BDS</option><option>BAMS</option><option>BHMS</option><option>MD/MS</option><option>DNB</option><option>AIAPGET</option></select>
+      </div>
+      <div class="field"><label>NEET Score</label><input type="number" id="esScore" placeholder="Out of 720" min="0" max="720"></div>
+      <div class="field"><label>All India Rank (AIR)</label><input type="number" id="esAIR" placeholder="e.g. 12500" min="1"></div>
+      <div class="field"><label>Category</label>
+        <select id="esCategory"><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option><option>PWD</option></select>
+      </div>
+      <div class="field"><label>Domicile State</label><input type="text" id="esDomicile" placeholder="State of domicile"></div>
+      <div class="field"><label>NEET Year</label><input type="number" id="esYear" placeholder="e.g. 2026" min="2020" max="2030"></div>
+      <div class="field"><label>Assigned Counsellor</label>
+        <select id="esCounsellor"><option value="">— Unassigned —</option></select>
+      </div>
+    </div>
+    <div class="field" style="margin-top:14px"><label>Admin Notes (internal, not shown to student)</label>
+      <textarea id="esAdminNotes" rows="2" placeholder="Internal notes..." style="width:100%;padding:10px;border:2px solid var(--border);border-radius:var(--r-md);font-size:13px;resize:vertical;outline:none;font-family:var(--font-b)"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button onclick="closeEditStu()" class="btn btn-outline-vio">Cancel</button>
+      <button onclick="saveEditStu()" class="btn btn-primary" style="flex:1;justify-content:center">💾 Save Student Details</button>
+    </div>
+    <div id="editStuMsg" style="margin-top:10px;font-size:13px;display:none"></div>
+  </div>
+</div>
+
+<!-- EDIT COUNSELLOR MODAL (Admin) -->
+<div class="modal-bg" id="editCounModal">
+  <div class="modal-bx" style="max-width:600px">
+    <div class="modal-hd">
+      <div><h3 style="font-size:18px;margin-bottom:4px">✏️ Edit Counsellor Details</h3><p id="editCounInfo" style="font-size:13px;color:var(--text-lt);margin:0"></p></div>
+      <button class="modal-close" onclick="closeEditCoun()">✕</button>
+    </div>
+    <input type="hidden" id="editCounId">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="field"><label>Full Name *</label><input type="text" id="ecName" placeholder="Counsellor name"></div>
+      <div class="field"><label>Email Address *</label><input type="email" id="ecEmail" placeholder="email@example.com"></div>
+      <div class="field"><label>Mobile Number</label><input type="tel" id="ecMobile" placeholder="10-digit" maxlength="10"></div>
+      <div class="field"><label>Role</label>
+        <select id="ecRole"><option value="counsellor">Counsellor</option><option value="senior">Senior Counsellor</option></select>
+      </div>
+      <div class="field"><label>New Password <small style="font-weight:400;color:var(--text-lt)">(leave blank to keep)</small></label>
+        <input type="password" id="ecPassword" placeholder="New password (optional)">
+      </div>
+      <div class="field"><label>Status</label>
+        <select id="ecStatus"><option value="true">Active</option><option value="false">Inactive (blocked)</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button onclick="closeEditCoun()" class="btn btn-outline-vio">Cancel</button>
+      <button onclick="saveEditCoun()" class="btn btn-primary" style="flex:1;justify-content:center">💾 Save Counsellor Details</button>
+    </div>
+    <div id="editCounMsg" style="margin-top:10px;font-size:13px;display:none"></div>
+  </div>
+</div>
+
+<!-- VIEW STUDENT LOGS MODAL -->
+<div class="modal-bg" id="stuLogsModal">
+  <div class="modal-bx" style="max-width:700px">
+    <div class="modal-hd">
+      <div><h3 style="font-size:18px;margin-bottom:4px">📋 Student Activity Log</h3><p id="stuLogsInfo" style="font-size:13px;color:var(--text-lt);margin:0"></p></div>
+      <button class="modal-close" onclick="closeStuLogs()">✕</button>
+    </div>
+    <div class="tcard">
+      <div class="twrap"><table class="atable"><thead><tr><th>Time</th><th>Action</th><th>By</th><th>Detail</th></tr></thead>
+      <tbody id="stuLogsTb"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /dashPage -->
+
+<!-- CHOICE LIST MODAL -->
+<div class="modal-bg" id="clModal">
+  <div class="modal-bx">
+    <div class="modal-hd">
+      <div><h3 id="clTitle" style="font-size:18px;margin-bottom:4px">Choice List Editor</h3><p id="clInfo" style="font-size:13px;color:var(--text-lt);margin:0"></p></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="clStudentSaved" style="background:var(--teal-pale);border:1.5px solid var(--teal-pale2);border-radius:var(--r-md);padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--text-mid);display:none"></div>
+    <div style="background:var(--violet-pale);border:1.5px solid var(--border);border-radius:var(--r-md);padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--text-mid)">☰ <strong>Drag</strong> to reorder · ✏️ <strong>Edit</strong> inline · ➕ <strong>Add</strong> · × <strong>Remove</strong></div>
+    <div style="display:grid;grid-template-columns:22px 28px 1fr 110px 80px 80px 28px;gap:6px;padding:0 8px 8px;border-bottom:1.5px solid var(--border);margin-bottom:8px">
+      <span></span><span style="font-size:10px;font-weight:800;color:var(--text-lt)">#</span>
+      <span style="font-size:10px;font-weight:800;color:var(--text-lt);text-transform:uppercase">College</span>
+      <span style="font-size:10px;font-weight:800;color:var(--text-lt);text-transform:uppercase">City</span>
+      <span style="font-size:10px;font-weight:800;color:var(--text-lt);text-transform:uppercase">Type</span>
+      <span style="font-size:10px;font-weight:800;color:var(--text-lt);text-transform:uppercase">Fee/yr</span>
+      <span></span>
+    </div>
+    <div id="clEditor"></div>
+    <button class="add-row-btn" onclick="addCLRow()">➕ Add College</button>
+    <div class="field" style="margin-top:16px">
+      <label>Counsellor Note (visible to student in dashboard &amp; PDF)</label>
+      <textarea id="clNote" rows="3" placeholder="Personal advice, deadlines, counselling strategy..." style="width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--r-md);font-size:14px;resize:vertical;outline:none;font-family:var(--font-b)"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button onclick="closeModal()" class="btn btn-outline-vio">Cancel</button>
+      <button onclick="downloadAdminPDF()" class="btn btn-outline-vio">📄 Counsellor PDF</button>
+      <button onclick="saveAndSend(true)" class="btn btn-outline-vio">💾 Save Draft</button>
+      <button onclick="saveAndSend(false)" class="btn btn-primary" id="saveBtn" style="flex:1;justify-content:center">✅ Save &amp; Send to Student</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+var INST_DATA = [{"state":"Andhra Pradesh","total":42,"govt":18,"pvt":24,"deemed":0,"colleges":[{"n":"ACSR Government Medical College, Nellore","c":"Nellore","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Andhra Medical College, Visakhapatnam","c":"Visakhapatnam","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Anantapur","c":"Anantapur","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Eluru","c":"Eluru","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Kadapa","c":"Kadapa","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Machilipatnam","c":"Machilipatnam","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Nandyal","c":"Nandyal","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Ongole","c":"Ongole","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Paderu","c":"Paderu","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Rajamahendravaram","c":"Rajamahendravaram","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Srikakulam","c":"Srikakulam","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Government Medical College, Vizianagaram","c":"Vizianagaram","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Guntur Medical College, Guntur","c":"Guntur","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Kurnool Medical College, Kurnool","c":"Kurnool","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Rangaraya Medical College, Kakinada","c":"Kakinada","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Siddhartha Medical College, Vijayawada","c":"Vijayawada","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Sri Padmavathi Medical College for Women, Tirupati (under SVIMS)","c":"Tirupati","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Sri Venkateswara Medical College, Tirupati","c":"Tirupati","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Alluri Seetharama Raju Academy of Medical Sciences, Eluru","c":"Eluru","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Alluri Sitarama Raju Academy of Medical Sciences, Eluru","c":"Eluru","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Anna Gowri Medical College and Hospital, Parameshwaramangalam","c":"Parameshwaramangalam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Apollo Institute of Medical Sciences and Research, Chittoor","c":"Chittoor","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Dr. Pinnamaneni Siddhartha Institute of Medical Sciences, Gannavaram","c":"Gannavaram","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Fathima Institute of Medical Sciences, Kadapa","c":"Kadapa","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"GSL Medical College, Rajamahendravaram","c":"Rajamahendravaram","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Gayatri Vidya Parishad Inst. of Health Care and Medical Technology, Visakhapatnam","c":"Visakhapatnam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Gayatri Vidya Parishad Institute of Health Care and Medical Technology, Visakhapatnam","c":"Visakhapatnam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Great Eastern Medical School and Hospital, Srikakulam","c":"Srikakulam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Katuri Medical College and Hospital, Guntur","c":"Guntur","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Konaseema Institute of Medical Sciences and Research Foundation, Amalapuram","c":"Amalapuram","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Maharaja Institute of Medical Sciences, Vizianagaram","c":"Vizianagaram","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"NRI Institute of Medical Sciences, Visakhapatnam","c":"Visakhapatnam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"NRI Medical College and Hospital, Chinnakakani, Guntur","c":"Chinnakakani","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"NRI Medical College, Chinnakakani","c":"Chinnakakani","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Narayana Medical College, Nellore","c":"Nellore","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Nimra Institute of Medical Sciences, Vijayawada","c":"Vijayawada","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"P.E.S. Institute of Medical Sciences and Research, Kuppam","c":"Kuppam","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Santhiram Medical College, Nandyal","c":"Nandyal","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Sri Balaji Medical College Hospital and Research Institute, Renigunta, Tirupati","c":"Tirupati","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Viswabharathi Medical College and General Hospital, Kurnool","c":"Kurnool","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Viswabharathi Medical College, Kurnool","c":"Kurnool","t":"private","gf":"₹15,000","mf":"₹12.0L","rf":"—"},{"n":"Nimra Institute of Medical Sciences, Ibrahimpatnam, Vijayawada","c":"Vijayawada","t":"minority","gf":"₹15,000","mf":"₹12.0L","rf":"—"}]},{"state":"Bihar","total":22,"govt":14,"pvt":8,"deemed":0,"colleges":[{"n":"ANUGRAH NARAYAN MAGADH MEDICAL COLLEGE, GAYA","c":"Gaya","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"DARBHANGA MEDICAL COLLEGE, LAHERIASARAI","c":"Laheriasarai","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"GAYA MEDICAL COLLEGE, GAYA","c":"Gaya","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, BETTIAH","c":"Bettiah","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, EAST CHAMPARAN","c":"Motihari","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, MADHUBANI","c":"Madhubani","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, PURNIA","c":"Purnia","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"INDIRA GANDHI INSTITUTE OF MEDICAL SCIENCES, PATNA","c":"Patna","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"JAWAHARLAL NEHRU MEDICAL COLLEGE, BHAGALPUR","c":"Bhagalpur","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"MEDICAL COLLEGE & HOSPITAL, SAHARSA","c":"Saharsa","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"NALANDA MEDICAL COLLEGE, PATNA","c":"Patna","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"PATLIPUTRA MEDICAL COLLEGE & HOSPITAL, PALIGANJ, PATNA","c":"Paliganj","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"PATNA MEDICAL COLLEGE, PATNA","c":"Patna","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"SRI KRISHNA MEDICAL COLLEGE, MUZAFFARPUR","c":"Muzaffarpur","t":"govt","gf":"₹8,000","mf":"₹8,000","rf":"—"},{"n":"BHOJPUR MEDICAL INSTITUTE OF MEDICAL SCIENCES, PAWAPI, NALANDA","c":"Pawapuri","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"JANAKI MEDICAL COLLEGE & HOSPITAL, MADHEPURA","c":"Madhepura","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"KATIHAR MEDICAL COLLEGE, KATIHAR","c":"Katihar","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"MEDICAL COLLEGE & HOSPITAL, BIHTA, PATNA","c":"Patna","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"MGM MEDICAL COLLEGE & LSK HOSPITAL, KISHANGANJ","c":"Kishanganj","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"NETAJI SUBHAS MEDICAL COLLEGE & HOSPITAL, SASARAM","c":"Sasaram","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"RDJM MEDICAL COLLEGE & HOSPITAL, KHAGARIA","c":"Khagaria","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"},{"n":"SHRI KRISHNA MEDICAL COLLEGE, TKI, MUZAFFARPUR","c":"Muzaffarpur","t":"private","gf":"₹9.0L","mf":"₹15.0L","rf":"—"}]},{"state":"Chhattisgarh","total":15,"govt":10,"pvt":5,"deemed":0,"colleges":[{"n":"Bharatratna Late shri Atal Bihari Vajpayee MGMC Rajnandgaon","c":"Rajnandgaon","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Chandulal Chandrakar Memorial Government Medical College, Durg","c":"Durg","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Chhattisgarh Institute of Medical Sciences, Bilaspur","c":"Bilaspur","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, AMBIKAPUR","c":"Ambikapur","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, KANKER","c":"Kanker","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, KORBA","c":"Korba","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Government Medical College Mahasamund","c":"Mahasamund","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"LATE BALIRAM KASHYAP SMRITI SH. MEDICAL COLLEGE, JAGDALPUR","c":"Jagdalpur","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"LATE SHRI LAKHIRAM AGRAWAL MEMORIAL MEDICAL COLLEGE, RAIGARH","c":"Raigarh","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"PT.JAWAHAR LAL NEHRU MEMORIAL MEDICAL COLLEGE, RAIPUR","c":"Raipur","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Abhishek Mishra Memorial Medical College and Research Bhilai (C.G.)","c":"Bhilai","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"},{"n":"Raipur Institute of Medical Science, Raipur","c":"Raipur","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"},{"n":"Shri Balaji Institute of Medical Science, Raipur","c":"Raipur","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"},{"n":"Shri Rawatpura Sarkar Institute Of Medical Science And Research, Naya Raipur (C.G.)","c":"Naya Raipur","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"},{"n":"Shri Shankaracharya IMS Bhilai","c":"Bhilai","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"}]},{"state":"Gujarat","total":41,"govt":22,"pvt":19,"deemed":0,"colleges":[{"n":"B. J Medical College Ahmedabad","c":"Ahmedabad","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"ESIC MEDICAL COLLEGE NARODA BAPUNAGAR AHMEDABAD","c":"Ahmedabad","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GMERS Medical College Dharpur Patan","c":"Patan","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Gandhinagar","c":"Gandhinagar","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Godhra","c":"Godhra","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Gotri Vadodara","c":"Vadodara","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Himmatnagar","c":"Himmatnagar","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Junagadh","c":"Junagadh","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Morbi","c":"Morbi","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Navsari","c":"Navsari","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Porbandar","c":"Porbandar","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Rajpipla","c":"Rajpipla","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Sola Ahmedabad","c":"Ahmedabad","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Vadnagar","c":"Vadnagar","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"GMERS Medical College Valsad","c":"Valsad","t":"govt","gf":"₹5.5L","mf":"₹5.5L","rf":"—"},{"n":"Government Medical College Bhavnagar","c":"Bhavnagar","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Government Medical College Surat","c":"Surat","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Government Medical College Vadodara","c":"Vadodara","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Narendra Modi Medical College Ahmedabad","c":"Ahmedabad","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Pandit Deendayal Upadhyay Medical College Rajkot","c":"Rajkot","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Shri M.P.Shah Government Medical College Jamnagar","c":"Jamnagar","t":"govt","gf":"₹25,000","mf":"₹25,000","rf":"—"},{"n":"Smt. NHL Municipal Medical College Ahmedabad","c":"Ahmedabad","t":"govt","gf":"₹8.3L","mf":"₹8.3L","rf":"—"},{"n":"Ananya Colege of Medicine and Research","c":"Kalol","t":"private","gf":"₹9.5L","mf":"₹9.5L","rf":"—"},{"n":"Banas Medical College & Research Institute Palanpur","c":"Palanpur","t":"private","gf":"₹8.9L","mf":"₹8.9L","rf":"—"},{"n":"Bhagyoday Medical College Station Road Kadi District Mehsana","c":"Kadi","t":"private","gf":"₹8.8L","mf":"₹8.8L","rf":"—"},{"n":"C. U. Shah Medical College Surendranagar","c":"Surendranagar","t":"private","gf":"₹8.7L","mf":"₹8.7L","rf":"—"},{"n":"Dr. Kiran C. Patel Medical College & Research Institute","c":"Anand","t":"private","gf":"₹9.5L","mf":"₹9.5L","rf":"—"},{"n":"Dr. M. K. Shah Medical College And Research Centre Ahmedabad","c":"Ahmedabad","t":"private","gf":"₹8.7L","mf":"₹8.7L","rf":"—"},{"n":"Dr. N. D. Desai Faculty of Medical Science and Research Nadiad","c":"Nadiad","t":"private","gf":"₹8.7L","mf":"₹8.7L","rf":"—"},{"n":"GCS Medical College Ahmedabad","c":"Ahmedabad","t":"private","gf":"₹9.7L","mf":"₹9.7L","rf":"—"},{"n":"Gujrat Adani Institute of Medical Sciences Bhuj","c":"Bhuj","t":"private","gf":"₹10.0L","mf":"₹10.0L","rf":"—"},{"n":"Karnavati School of Dentistry Uvarsad Gandhinagar","c":"Gandhinagar","t":"private","gf":"₹9.3L","mf":"₹9.3L","rf":"—"},{"n":"Kiran Medical College Surat","c":"Surat","t":"private","gf":"₹9.5L","mf":"₹9.5L","rf":"—"},{"n":"Matushri Prabhaben Khodabhai Boghara Medical College & Research Centre Atkot Rajkot","c":"Rajkot","t":"private","gf":"₹8.8L","mf":"₹8.8L","rf":"—"},{"n":"Nootan Medical College & Research Centre Visnagar","c":"Visnagar","t":"private","gf":"₹9.8L","mf":"₹9.8L","rf":"—"},{"n":"Parul Institute Of Medical Sciences & Research Post. Limda Dist. Vadodara","c":"Vadodara","t":"private","gf":"₹11.2L","mf":"₹11.2L","rf":"—"},{"n":"Pramukhswami Medical College Karamsad","c":"Karamsad","t":"private","gf":"₹10.9L","mf":"₹10.9L","rf":"—"},{"n":"SAL Institute of Medical Sciences","c":"Ahmedabad","t":"private","gf":"₹10.7L","mf":"₹10.7L","rf":"—"},{"n":"Shantabaa Medical College Amreli","c":"Amreli","t":"private","gf":"₹9.3L","mf":"₹9.3L","rf":"—"},{"n":"Swaminarayan Institute of Medical Sciences & Research","c":"","t":"private","gf":"₹10.1L","mf":"₹10.1L","rf":"—"},{"n":"Zydus Medical College and Hospital Dahod","c":"Dahod","t":"private","gf":"₹10.5L","mf":"₹10.5L","rf":"—"}]},{"state":"Haryana","total":15,"govt":8,"pvt":7,"deemed":0,"colleges":[{"n":"Bhagat Phool Singh Govt. Medical College For Women, Khanpur Kalan, Sonepat","c":"Khanpur Kalan","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"ESIC Medical College, NIT, Faridabad","c":"NIT Faridabad","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"Kalpana Chawla Govt. Medical College, Karnal","c":"Karnal","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Maharishi Chyawan Government Medical College, Koriawas, Narnaul","c":"Koriawas","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Pandit Bhagwat Dayal Sharma PGIMS, Rohtak","c":"Rohtak","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Pt. Neki Ram Sharma Government Medical College, Bhiwani","c":"Bhiwani","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Sh. Atal Bihari Vajpayee Government Medical College, Chhainsa, Faridabad","c":"Chhainsa","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Shaheed Hasan Khan Mewati Govt. Medical College, Nalhar Mewat","c":"Nalhar","t":"govt","gf":"₹58,000","mf":"₹58,000","rf":"—"},{"n":"Adesh Medical College & Hospital, Shahbad (M), Kurukshetra","c":"Shahbad Markanda","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"Al-Falah School of Medical Science & Research Centre, Faridabad","c":"Faridabad","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"Faculty of Medicine & Health Sciences, SGT University, Gurugram","c":"Gurugram","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"Maharaja Agrasen Medical College, Agroha Hisar","c":"Agroha","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"Maharishi Markendeshwar College of Medical Sciences and Research (Maharishi Markendeshwar University) Sadhopur, Ambala","c":"Sadhopur","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"NC Medical College & Hospital, Israna, Panipat","c":"Israna","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"},{"n":"World College Of Medical Sciences And Research, Jhajjar","c":"Jhajjar","t":"private","gf":"₹10.0L","mf":"₹14.0L","rf":"—"}]},{"state":"Himachal Pradesh","total":7,"govt":6,"pvt":1,"deemed":0,"colleges":[{"n":"Dr RadhaKrishanan Govt Medical College Hamirpur","c":"Hamirpur","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Dr Rajendra Prasad Govt Medical College Tanda Kangra","c":"Tanda","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Dr Yashwant Parmar Govt Medical College Nahan Sirmour","c":"Nahan","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Indira Gandhi Medical College Shimla","c":"Shimla","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Pt Jawahar Lal Nehru Govt Medical College and Hospital Chamba","c":"Chamba","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Shri Lal Bahadur Shastri Govt Medical College and Hospital Nerchowk Mandi","c":"Nerchowk","t":"govt","gf":"₹45,000","mf":"₹45,000","rf":"—"},{"n":"Maharishi Markandeshwar Medical College kumarhatti District Solan","c":"Kumarhatti","t":"private","gf":"₹12.0L","mf":"₹16.0L","rf":"—"}]},{"state":"Jharkhand","total":10,"govt":7,"pvt":3,"deemed":0,"colleges":[{"n":"Mahatma Gandhi Memorial Medical College, Jamshedpur","c":"Jamshedpur","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Medinirai Medical College (Palamu Medical College), Palamu","c":"Medininagar","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Medinirai Medical College, Palamu","c":"Medininagar","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Phulo Jhano Medical College, Dumka","c":"Dumka","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Rajendra Institute of Medical Sciences, Ranchi","c":"Ranchi","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"SHEIKH BHIKHARI MEDICAL COLLEGE & HOSPITAL , HAZARIBAGH","c":"Hazaribagh","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Shaheed Nirmal Mahto Medical College, Dhanbad","c":"Dhanbad","t":"govt","gf":"₹15,000","mf":"₹15,000","rf":"—"},{"n":"Laxmi Chandravansi Medical College & Hospital, Palamu","c":"Bishrampur","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"},{"n":"Manipal TATA Medical College, Jamshedpur","c":"Jamshedpur","t":"private","gf":"₹16.1L","mf":"₹16.1L","rf":"—"},{"n":"Netaji Subhas Medical College and Hospital, Seraikela","c":"Adityapur","t":"private","gf":"₹8.0L","mf":"₹12.0L","rf":"—"}]},{"state":"Karnataka","total":65,"govt":15,"pvt":50,"deemed":0,"colleges":[{"n":"Bangalore Medical College and Research Institute","c":"Bangalore","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Belgaum Institute of Medical Sciences","c":"Belagavi","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Bidar Institute of Medical Sciences","c":"Bidar","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Chamarajanagar Institute of Medical Sciences","c":"Chamarajanagar","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Chikkamagaluru Institute of Medical Sciences","c":"","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Chitradurga Medical College and Research Institute","c":"","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"ESI Medical College","c":"Kalaburagi","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Gulbarga Institute of Medical Sciences","c":"Kalaburagi","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Jagadguru Sri Shivarathreeswara Medical College","c":"Mysore","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Jawaharalal Nehru Medical College","c":"Belagavi","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Karnataka Institute of Medical Sciences","c":"Hubballi","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Mandya Institute of Medical Sciences","c":"Mandya","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Mysore Medical College","c":"Mysore","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Siddaganga Medical College and Research Institute","c":"","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"Yenepoya Medical College","c":"Mangalore","t":"govt","gf":"₹64,350","mf":"₹64,350","rf":"—"},{"n":"A.J.Institute of Medical Sciences","c":"Mangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Adichunchanagiri Institute of Medical Sciences","c":"Bellur","t":"private","gf":"₹1.6L","mf":"₹22.0L","rf":"—"},{"n":"Akash Institute of Medical Sciences and Research Centre","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Al-Ameen Medical College","c":"Vijayapura","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"BGS Global Institute of Medical Sciences","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"BGS Medical College and Hospital(BGS MCH) Nagarur Dasanapura Hobli Banglore North","c":"Bangalore","t":"private","gf":"₹1.6L","mf":"₹18.0L","rf":"—"},{"n":"Chikkaballapura Institute of Medical Science","c":"Chikkaballapura","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Dr. B.R. Ambedkar Medical College","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Dr. Chandramma Dayananda Sagar Institute of Medical Education","c":"Kanakapura","t":"private","gf":"₹1.6L","mf":"₹22.0L","rf":"—"},{"n":"East Point College of Medical Sciences and Research Center","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Farookh Academy of Medical Education Hospital and Research Institute","c":"Mysore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Father Muller Institute of Med. Education & Research","c":"Mangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Gadag Institute of Medical Sciences","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Hassan Institute of Medical Sciences","c":"Hassan","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Haveri Institute of Medical Sciences","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Jagadguru Gangadhar Mahaswamigalu Moorusavirmath Medical College","c":"","t":"private","gf":"₹6.1L","mf":"₹19.1L","rf":"—"},{"n":"Jaya Jagadguru Murugharajendra Medical College","c":"Davanagere","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"K.S.Hegde Medical Academy","c":"Mangalore","t":"private","gf":"₹1.6L","mf":"₹17.8L","rf":"—"},{"n":"K.Venkataramana Gowda Medical College and Hospital","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Kanachur Institute of Medical Sciences and Research Centre","c":"Mangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Karwar Institute of Medical Science","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Kasturba Medical College","c":"Mangalore","t":"private","gf":"₹1.5L","mf":"₹17.8L","rf":"—"},{"n":"Kempegowda Institute of Medical Sciences","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Khaja Bande Navaz Institute Of Medical Sciences","c":"Kalaburagi","t":"private","gf":"₹1.6L","mf":"₹18.0L","rf":"—"},{"n":"Kodagu Institute of Medical Sciences","c":"Kodagu","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Koppal Institute of Medical Sciences","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"M.S.Ramaiah Medical College","c":"Bangalore","t":"private","gf":"₹1.6L","mf":"₹26.0L","rf":"—"},{"n":"M.V.J.Medical College and Research Hospital","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Mahadevappa Rampure Medical College","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Navodaya Medical College","c":"Raichur","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"PES University Institute of Medical Sceinces and Research","c":"Bangalore","t":"private","gf":"₹1.6L","mf":"₹22.0L","rf":"—"},{"n":"Raichur Institute of Medical Sciences","c":"Raichur","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"S R Patil Medical College Hospital and Research Center","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"S. Nijalingappa Medical College and Research Centre","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"SDM College of Medical Sciences and Hospital","c":"Dharwad","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"SRI CHAMUNDESHWARI MEDICAL COLLEGE","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Sapthagiri Institute of Medical Sciences","c":"Bangalore","t":"private","gf":"₹1.8L","mf":"₹22.0L","rf":"—"},{"n":"Shimoga Institute of Medical Sciences","c":"Shivamogga","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Shri Atal Bihari Vajpayee Institute of Medical Science","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Shridevi Institute of Medical Sciences and Research Hospital","c":"Tumakuru","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Shyamanuru Shivashankarappa Institute of Medical Sciences","c":"Davanagere","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Sri Basaveshwara Medical College and Hospital","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Sri Madhusudan Sai Institute of Medical Sciences and Research","c":"Chikkaballapura","t":"private","gf":"—","mf":"—","rf":"—"},{"n":"Srinivasa Institute of Medical Research Center Srinivas Nagar Mangalore","c":"Mangalore","t":"private","gf":"₹1.7L","mf":"₹22.0L","rf":"—"},{"n":"St John Medical College","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Subbaiah Institute of Medical Science","c":"Shivamogga","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"The Oxford Medical College Hospital and Research Center","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Vijayanagar Institute of Medical Sciences","c":"Ballari","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Vydehi Institute of Medical Science and Research Centre","c":"Bangalore","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"},{"n":"Yadgiri Institute of Medical Sciences","c":"","t":"private","gf":"₹1.5L","mf":"₹12.0L","rf":"—"}]},{"state":"Kerala","total":35,"govt":14,"pvt":21,"deemed":0,"colleges":[{"n":"Government Medical College Idukki","c":"Idukki","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Government Medical College Kannur","c":"Pariyaram","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Government Medical College, Konni, Pathanamthitta","c":"Konni","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Government Medical College, Palakkad","c":"Palakkad","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Ernakulam","c":"Ernakulam","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Kasaragod","c":"Kasaragod","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Kottayam","c":"Kottayam","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Kozhikkode","c":"Kozhikode","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Manjeri","c":"Manjeri","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Parippally, Kollam","c":"Parippally","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Thiruvananthapuram","c":"Thiruvananthapuram","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Thrissur","c":"Thrissur","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Govt. Medical College, Wayanad","c":"Wayanad","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"T D Govt. Medical College, Alappuzha","c":"Alappuzha","t":"govt","gf":"₹27,580","mf":"₹27,580","rf":"—"},{"n":"Al Azhar Medical college, Thodupuzha","c":"Thodupuzha","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Amala Institute of Medical Sciences, Thrissur","c":"Thrissur","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Azeezia Institute of Medi Science, Meyyannoor, Kollam","c":"Kollam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Believers Church Medical College Hospital, Thiruvalla","c":"Thiruvalla","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Dr. Moopens Medical College, Meppadi, Wayanad","c":"Meppadi","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Dr. Somervell Memorial CSI Medical College, Karakonam","c":"Karakonam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Jubilee Mission Medical College, Thrisur","c":"Thrissur","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"KMCT Medical College, Mukkom, Kozikkode","c":"Mukkam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Karuna Medical College, Vilayodi, Palakkad","c":"Chittur","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Kerala Medical College, Palakkad","c":"Palakkad","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"MES Medical College, Perinthalmanna, Malappuram","c":"Perinthalmanna","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Malabar Medical College Hospital, Kozhikkode","c":"Kozhikode","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Malankara Orthodox Syrian Church MediCollege, Kolenchery","c":"Kolenchery","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Mount Zion Medical College, Pathanamthitta","c":"Adoor","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"P K Das Institute of Medical Sciences, Ottapalam","c":"Ottapalam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Palakkad Institute of Medical Sciences, Walayar","c":"Walayar","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Pushpagiri Institute of Medical Science, Thiruvalla","c":"Thiruvalla","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"SUT Accademy of Medical Sciences, Thiruvananthapuram","c":"Thiruvananthapuram","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Sree Gokulam Medical College, Venjaramoodu, TVPM","c":"Venjaramoodu","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Sree Narayana Institute of Medical Sciences, Chalakka, Ernakulam.","c":"Ernakulam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"},{"n":"Travancore Medical College, Umayanalloor, Kollam","c":"Kollam","t":"private","gf":"₹6.0L","mf":"₹15.0L","rf":"—"}]},{"state":"Madhya Pradesh","total":29,"govt":17,"pvt":12,"deemed":0,"colleges":[{"n":"ATAL BIHARI VAJPAYEE GOVERNMENT MEDICAL COLLEGE VIDISHA","c":"Vidisha","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"BIRSA MUNDA GOVERNMENT MEDICAL COLLEGE SHAHDOL","c":"Shahdol","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"BUNDELKHAND MEDICAL COLLEGE SAGAR","c":"Sagar","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"CHHINDWARA INSTITUTE OF MEDICAL SCIENCES CHHINDWARA","c":"Chhindwara","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GAJRA RAJA MEDICAL COLLEGE GWALIOR","c":"Gwalior","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GANDHI MEDICAL COLLEGE BHOPAL","c":"Bhopal","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GOVERMENT MEDICAL COLLEGE RATLAM","c":"Ratlam","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE DATIA","c":"Datia","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE SATNA","c":"Satna","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE SEONI","c":"Seoni","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"MAHATMA GANDHI MEMORIAL MEDICAL COLLEGE INDORE","c":"Indore","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"NANDKUMAR SINGH CHOUHAN GOVERNMENT MEDICAL COLLEGE KHANDWA","c":"Khandwa","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"NETAJI SUBHASH CHANDRA BOSE MEDICAL COLLEGE JABALPUR","c":"Jabalpur","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"SHRIMANT RAJMATA VIJAYARAJE SCINDIA MEDICAL COLLEGE SHIVPURI","c":"Shivpuri","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"SHYAM SHAH MEDICAL COLLEGE REWA","c":"Rewa","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"SUNDERLAL PATWA GOVERNMENT MEDICAL COLLEGE MANDSAUR","c":"Mandsaur","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"VIRENDRA KUMAR SAKHLECHA GOVERNMENT MEDICAL COLLEGE NEEMUCH","c":"Neemuch","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"AMALTAS INSTITUTE OF MEDICAL SCIENCES DEWAS","c":"Dewas","t":"private","gf":"₹14.2L","mf":"—","rf":"₹33.3L"},{"n":"CHIRAYU MEDICAL COLLEGE AND HOSPITAL BHOPAL","c":"Bhopal","t":"private","gf":"₹16.6L","mf":"—","rf":"₹50.0L"},{"n":"LN MEDICAL COLLEGE BHOPAL","c":"Bhopal","t":"private","gf":"₹14.9L","mf":"—","rf":"₹52.7L"},{"n":"LNCT MEDICAL COLLEGE AND SEWAKUNJ HOSPITAL INDORE","c":"Indore","t":"private","gf":"₹14.2L","mf":"—","rf":"₹33.3L"},{"n":"MAHAVEER INSTITUTE OF MEDICAL SCIENCES AND RESEARCH BHOPAL","c":"Bhopal","t":"private","gf":"₹10.0L","mf":"—","rf":"₹28.0L"},{"n":"PEOPLES COLLEGE OF MEDICAL SCIENCE BHOPAL","c":"Bhopal","t":"private","gf":"₹16.4L","mf":"—","rf":"₹45.6L"},{"n":"RAM KRISHNA MEDICAL COLLEGE HOSPITAL AND RESEARCH CENTRE BHOPAL","c":"Bhopal","t":"private","gf":"₹12.0L","mf":"—","rf":"₹30.0L"},{"n":"RD GARDI MEDICAL COLLEGE UJJAIN","c":"Ujjain","t":"private","gf":"₹11.0L","mf":"—","rf":"₹28.0L"},{"n":"RKDF MEDICAL COLLEGE HOSPITAL AND RESEARCH CENTRE BHOPAL","c":"Bhopal","t":"private","gf":"₹11.0L","mf":"—","rf":"₹28.0L"},{"n":"SCHOOL OF MEDICAL SCIENCE SRI SATYA SAI UNIVERSITY OF TECHNLOGY AND MEDICAL SCIENCES SEHORE","c":"Sehore","t":"private","gf":"₹11.0L","mf":"—","rf":"₹28.0L"},{"n":"SRI AUROBINDO INSTITUTE OF MEDICAL SCIENCE INDORE","c":"Indore","t":"private","gf":"₹13.0L","mf":"—","rf":"₹35.0L"},{"n":"SUKH SAGAR MEDICAL COLLEGE AND HOSPITAL JABALPUR","c":"Jabalpur","t":"private","gf":"₹11.0L","mf":"—","rf":"₹28.0L"}]},{"state":"Maharashtra","total":67,"govt":42,"pvt":25,"deemed":0,"colleges":[{"n":"B. J. MEDICAL COLLEGE PUNE","c":"Pune","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"DR. SHANKARRAO CHAVAN GOVT MEDICAL COLLEGE NANDED","c":"Nanded","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"DR. V.M. MEDICAL COLLEGE SOLAPUR","c":"Solapur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"ESIC MC ANDHERI MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"G. S. MEDICAL COLLEGE MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE & GT HOSP MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE ALIBAUG","c":"Alibaug","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE AMARAVATI","c":"Amravati","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE AMBERNATH","c":"Thane","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE BARAMATI","c":"Baramati","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE BHANDARA","c":"Bhandara","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE BULDHANA","c":"Buldhana","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE DHARASHIV","c":"Dharashiv","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE GADCHIROLI","c":"Gadchiroli","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE HINGOLI","c":"Hingoli","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE JALGAON","c":"Jalgaon","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE JALNA","c":"Jalna","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE NANDURBAR","c":"Nandurbar","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE NASHIK","c":"Nashik","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE PARBHANI","c":"Parbhani","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE RATNAGIRI","c":"Ratnagiri","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE SATARA","c":"Satara","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE SINDHUDURG","c":"Sindhudurg","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE WASHIM","c":"Washim","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVT MEDICAL COLLEGE AKOLA","c":"Akola","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVT. MEDICAL COLLEGE CH. SAMBHAJINAGAR","c":"Chhatrapati Sambhajinagar","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVT. MEDICAL COLLEGE GONDIA","c":"Gondia","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVT. MEDICAL COLLEGE MIRAJ","c":"Miraj","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GOVT. MEDICAL COLLEGE NAGPUR","c":"Nagpur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"GRANT MEDICAL COLLEGE MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"HBT & DR. R. N. COOPER MEDICAL COLLEGE JUHU, MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"INDIRA GANDHI MEDICAL COLLEGE NAGPUR","c":"Nagpur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"KARMVIR M.S. KANNAMWAR GOVT. MEDICAL COLLEGE CHANDRAPUR","c":"Chandrapur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"L. T. MEDICAL COLLEGE MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"MAHATAMA GANDHI INSTITUTE OF  MEDICAL SCIENCES SEVAGRAM,WARDHA","c":"Wardha","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"R.C.S.M. GOVT MEDICAL COLLEGE KOLHAPUR","c":"Kolhapur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"RAJEEV GANDHI MEDICAL COLLEGE THANE","c":"Thane","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"S.R.T.R. MEDICAL COLLEGE AMBAJOGAI","c":"Beed","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"SHREE BHAUSAHEB HIRE MEDICAL COLLEGE DHULE","c":"Dhule","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"SHRI V.N. GOVT. MEDICAL COLLEGE YEOTMAL","c":"Yavatmal","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"T. N. MEDICAL COLLEGE MUMBAI","c":"Mumbai","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"VILASRAO DESHMUKH GOVT MEDICAL COLLEGE LATUR","c":"Latur","t":"govt","gf":"₹1.6L","mf":"₹1.6L","rf":"—"},{"n":"ACPM MEDICAL COLLEGE DHULE","c":"Dhule","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"},{"n":"ASHWINI RURAL MEDICAL COLLEGE SOLAPUR","c":"Solapur","t":"private","gf":"₹10.3L","mf":"—","rf":"₹41.3L"},{"n":"B.K.L. WALAWALKAR RURAL MEDICAL COLLEGE RATNAGIRI","c":"Ratnagiri","t":"private","gf":"₹11.7L","mf":"—","rf":"₹46.6L"},{"n":"BHARATRATNA ATAL BIHARI VAJPAYEE MEDICAL COLLEGE PUNE","c":"Pune","t":"private","gf":"₹7.5L","mf":"—","rf":"₹30.0L"},{"n":"DR RAJENDRA GODE MEDICAL COLLEGE AMARAVATI","c":"Amravati","t":"private","gf":"₹8.1L","mf":"—","rf":"₹32.5L"},{"n":"DR. N. Y. TASGAONKAR INSTITUTE OF MEDICAL SCIENCE KARJAT","c":"Raigad","t":"private","gf":"₹7.7L","mf":"—","rf":"₹30.6L"},{"n":"DR. PANJABRAO DESHMUKH MEDICAL COLLEGE AMRAVATI","c":"Amravati","t":"private","gf":"₹10.8L","mf":"—","rf":"₹43.1L"},{"n":"DR. ULHAS PATIL MEDICAL COLLEGE JALGAON","c":"Jalgaon","t":"private","gf":"₹7.0L","mf":"—","rf":"₹28.0L"},{"n":"DR. V.P. MEDICAL COLLEGE NASIK","c":"Nashik","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"},{"n":"INDIAN INST. of MED. SC.& RESEARCH (MUSLIM MINORITY) JALNA (MUSLIM)","c":"Jalna","t":"private","gf":"₹7.7L","mf":"—","rf":"₹30.9L"},{"n":"K.J.SOMAIYA MEDICAL COLLEGE MUMBAI","c":"Mumbai","t":"private","gf":"₹12.0L","mf":"—","rf":"₹48.0L"},{"n":"MALATI HOSP & MC MURTIZAPUR AKOLA","c":"Murtizapur","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"},{"n":"MIMER MC TALEGAON PUNE","c":"Pune","t":"private","gf":"₹11.3L","mf":"—","rf":"₹45.2L"},{"n":"MIMSR MEDICAL COLLEGE LATUR","c":"Latur","t":"private","gf":"₹9.4L","mf":"—","rf":"₹37.8L"},{"n":"N.K.P. SALVE MEDICAL COLLEGE NAGPUR","c":"Nagpur","t":"private","gf":"₹13.9L","mf":"—","rf":"₹55.8L"},{"n":"PARBHANI MEDICAL COLLEGE & RP HOSP INST","c":"Parbhani","t":"private","gf":"₹8.8L","mf":"—","rf":"₹35.1L"},{"n":"PRAKASH INSTITUTE of MEDICAL SCIENCES & RESEARCH ISLAMPUR,SANGLI","c":"Sangli","t":"private","gf":"₹8.6L","mf":"—","rf":"₹34.6L"},{"n":"RK DAMANI MEDICAL COL AND SHRI RAMCHANDRA INST CH.SAMBHAJINAGAR","c":"Chhatrapati Sambhajinagar","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"},{"n":"SINDHUDURG SHIKSHAN PRASARAK MANDAL MEDICAL COLLEGE KUDAL SINDHUDURG","c":"Sindhudurg","t":"private","gf":"₹7.6L","mf":"—","rf":"₹30.6L"},{"n":"SMBT INSTITUTE of MEDICAL SCIENCES & RESEARCH CENTRE NANDIHILLS","c":"Nashik","t":"private","gf":"₹13.1L","mf":"—","rf":"₹52.4L"},{"n":"SMT.KASHIBAI NAVALE MEDICAL COLLEGE PUNE","c":"Pune","t":"private","gf":"₹12.3L","mf":"—","rf":"₹49.4L"},{"n":"SMT.S.N.KATKADE MC KOPERGAON","c":"Kopargaon","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"},{"n":"TERNA MEDICAL COLLEGE NAVI MUMBAI","c":"Mumbai","t":"private","gf":"₹8.4L","mf":"—","rf":"₹33.5L"},{"n":"VEDANTA MEDICAL COLLEGE PALGHAR","c":"Palghar","t":"private","gf":"₹15.6L","mf":"—","rf":"₹62.3L"},{"n":"VVPF'S MED. COL","c":"Ahmednagar","t":"private","gf":"₹8.5L","mf":"—","rf":"₹34.0L"}]},{"state":"Puducherry","total":4,"govt":1,"pvt":3,"deemed":0,"colleges":[{"n":"Indira Gandhi Medical College and Research Institute, Puducherry","c":"Puducherry","t":"govt","gf":"₹12,450","mf":"₹12,450","rf":"—"},{"n":"Pondicherry Institute of Medical Sciences, Puducherry","c":"Puducherry","t":"private","gf":"₹6.0L","mf":"₹12.0L","rf":"—"},{"n":"Sri Manakula Vinayagar Medical College and Hospital, Puducherry","c":"Puducherry","t":"private","gf":"₹6.0L","mf":"₹12.0L","rf":"—"},{"n":"Sri Venkateshwaraa Medical College and Research Institute, Puducherry","c":"Puducherry","t":"private","gf":"₹6.0L","mf":"₹12.0L","rf":"—"}]},{"state":"Punjab","total":11,"govt":4,"pvt":7,"deemed":0,"colleges":[{"n":"Dr.B.R Ambedkar State Institute of Medical Sciences S.A.S Nagar,Mohali","c":"SAS Nagar (Mohali)","t":"govt","gf":"₹52,000","mf":"₹52,000","rf":"—"},{"n":"Government Aided Medical College, Amritsar","c":"Amritsar","t":"govt","gf":"₹52,000","mf":"₹52,000","rf":"—"},{"n":"Government Aided Medical College, Patiala","c":"Patiala","t":"govt","gf":"₹52,000","mf":"₹52,000","rf":"—"},{"n":"Guru Gobind Singh Medical College Faridkot","c":"Faridkot","t":"govt","gf":"₹52,000","mf":"₹52,000","rf":"—"},{"n":"Adesh Institute of Medical Sciences & Research, Bathinda","c":"Bathinda","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"Christian Medical College, Ludhiana","c":"Ludhiana","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"Dayanand Medical College and Hospital Ludhiana","c":"Ludhiana","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"Gian Sagar Medical College & Hospital, Banur","c":"Banur","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"Punjab Institute of Medical Sciences, Jalandhar","c":"Jalandhar","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"RIMT Medical College and Hospital,Mandi Gobindgarh","c":"Mandi Gobindgarh","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"},{"n":"Sri Guru Ram Das Institute of Medical Sciences and Research Amritsar","c":"Amritsar","t":"private","gf":"₹10.5L","mf":"₹14.0L","rf":"—"}]},{"state":"Rajasthan","total":48,"govt":33,"pvt":15,"deemed":0,"colleges":[{"n":"ESIC Medical College and Hospital, Jaipur","c":"Jaipur","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"ESIC Medical College, Alwar","c":"Alwar","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"Government Medical College, Alwar","c":"Alwar","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Banswara","c":"Banswara","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Baran","c":"Baran","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Barmer","c":"Barmer","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Bharatpur","c":"Bharatpur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Bhilwara","c":"Bhilwara","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Bundi","c":"Bundi","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Chittorgarh","c":"Chittorgarh","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Churu","c":"Churu","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Dausa","c":"Dausa","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Dholpur","c":"Dholpur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Dungarpur","c":"Dungarpur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Hanumangarh","c":"Hanumangarh","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Jaisalmer","c":"Jaisalmer","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Jhunjhunu","c":"Jhunjhunu","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Karauli","c":"Karauli","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Kota","c":"Kota","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Nagaur","c":"Nagaur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Pali","c":"Pali","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Sawai Madhopur","c":"Sawai Madhopur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Sirohi","c":"Sirohi","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Sriganganagar","c":"Sri Ganganagar","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Government Medical College, Tonk","c":"Tonk","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"JLN Medical College, Ajmer","c":"Ajmer","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Jhalawar Medical College, Jhalawar","c":"Jhalawar","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"RNT Medical College, Udaipur","c":"Udaipur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"RUHS College of Medical Sciences, Jaipur","c":"Jaipur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"SMS Medical College, Jaipur","c":"Jaipur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"SN Medical College, Jodhpur","c":"Jodhpur","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"SP Medical College, Bikaner","c":"Bikaner","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"Shri Kalyan Government Medical College, Sikar","c":"Sikar","t":"govt","gf":"₹70,340","mf":"₹70,340","rf":"—"},{"n":"American International Institute of Medical Sciences, Udaipur","c":"Udaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Ananta Institute of Medical Sciences, Rajsamand","c":"Rajsamand","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Arya Medical College and Hospital, Jaipur","c":"Jaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Balvir Singh Tomar Institute of Medical Sciences, Jaipur","c":"Jaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Dr. SS Tantia Medical College, Sriganganagar","c":"Sri Ganganagar","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Geetanjali Institute of Medical Sciences, Udaipur","c":"Udaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Geetanjali Medical College, Udaipur","c":"Udaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"JIET Medical College, Jodhpur","c":"Jodhpur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"JNU Institute for Medical Sciences & RC, Jaipur","c":"Jaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Mahatma Gandhi Medical College, Jaipur","c":"Jaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"NIMS Medical College, Jaipur","c":"Jaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Pacific Institute of Medical Sciences, Udaipur","c":"Udaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Pacific Medical College & Hospital, Udaipur","c":"Udaipur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Sudha Medical College and Hospital, Kota","c":"Kota","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"},{"n":"Vyas Medical College & Hospital, Jodhpur","c":"Jodhpur","t":"private","gf":"₹15.0L","mf":"₹20.0L","rf":"—"}]},{"state":"Tamil Nadu","total":27,"govt":0,"pvt":27,"deemed":0,"colleges":[{"n":"ADHIPARASAKTHI INSTITUTE OF MEDICAL SCIENCES AND RESEARCH,MELMARUVATHUR","c":"Melmaruvathur","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"ANNAI MEDICAL COLLEGE & HOSPITAL, SRIPERUMBUDUR, CHENNAI","c":"Sriperumbudur","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"ANNAPOORNA MEDICAL COLLEGE & HOSPITAL, SALEM","c":"Salem","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"ARUNAI MEDICAL COLLEGE & HOSPITAL, TIRUVANNAMALAI","c":"Tiruvannamalai","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"CHRISTIAN MEDICAL COLLEGE, VELLORE","c":"Vellore","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"DHANALAKSHMI SRINIVASAN INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL, PERAMBALUR","c":"Perambalur","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"DHANALAKSHMI SRINIVASAN MEDICAL COLLEGE AND HOSPITAL, PERAMBALUR","c":"Perambalur","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"INDIRA MEDICAL COLLEGE & HOSPITALS, THIRUVALLUR","c":"Thiruvallur","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"KANYAKUMARI MEDICAL MISSION RESEARCH CENTER, KANYAKUMARI","c":"Kanyakumari","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"KARPAGA VINAYAGA INSTITUTE OF MEDICAL SCIENCES,MADURANTHAGAM","c":"Maduranthagam","t":"private","gf":"₹4.3L","mf":"₹15.0L","rf":"—"},{"n":"KARPAGAM FACULTY OF MEDICAL SCIENCES & RESEARCH, COIMBATORE","c":"Coimbatore","t":"private","gf":"₹4.4L","mf":"₹15.0L","rf":"—"},{"n":"KMCH INSTITUTE OF HEALTH SCIENCES AND RESEARCH, COIMBATORE","c":"Coimbatore","t":"private","gf":"₹4.3L","mf":"₹15.0L","rf":"—"},{"n":"MADHA MEDICAL COLLEGE AND HOSPITAL, THANDALAM, CHENNAI","c":"Chennai","t":"private","gf":"₹4.3L","mf":"₹15.0L","rf":"—"},{"n":"NANDHA MEDICAL COLLEGE AND HOSPITAL, PERUNDURAI, ERODE","c":"Perundurai","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"NANDHA MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE, NAMAKKAL","c":"Namakkal","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"PANIMALAR MEDICAL COLLEGE HOSPITAL & RESEARCH INSTITUTE, CHENNAI,TAMIL NADU","c":"Chennai","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"PSG INSTITUTE OF MEDICAL SCIENCES, COIMBATORE","c":"Coimbatore","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"PSP MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE, KANCHEEPURAM","c":"Kanchipuram","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"SREE MOOKAMBIKA INSTITUTE OF MEDICAL SCIENCES, KANYAKUMARI","c":"Kanyakumari","t":"private","gf":"₹4.4L","mf":"₹15.0L","rf":"—"},{"n":"SRI MUTHUKUMARAN MEDICAL COLLEGE,CHENNAI","c":"Chennai","t":"private","gf":"₹4.3L","mf":"₹15.0L","rf":"—"},{"n":"SRI VENKATESWARAA MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE, CHENNAI (PRIVATE UNIVERSITY)","c":"Chennai","t":"private","gf":"₹5.4L","mf":"₹15.0L","rf":"—"},{"n":"SRINIVASAN MEDICAL COLLEGE & HOSPITAL, SAMAYAPURAM, TRICHY","c":"Tiruchirappalli","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"ST.PETERS MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE, KRISHNAGIRI","c":"Krishnagiri","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"TAGORE MEDICAL COLLEGE AND HOSPITAL, CHENNAI","c":"Chennai","t":"private","gf":"₹4.3L","mf":"₹15.0L","rf":"—"},{"n":"TAKSHASHILA MEDICAL COLLEGE, ONGUR, TINDIVANAM, VILLUPURAM","c":"Tindivanam","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"TRICHY SRM MEDICAL COLLEGE HOSPITAL & RESEARCH CENTRE, TRICHY","c":"Tiruchirappalli","t":"private","gf":"₹4.5L","mf":"₹15.0L","rf":"—"},{"n":"VELAMMAL MEDICAL COLLEGE HOSPITAL AND RESEARCH INSTITUTE, MADURAI","c":"Madurai","t":"private","gf":"₹4.4L","mf":"₹15.0L","rf":"—"}]},{"state":"Telangana","total":64,"govt":36,"pvt":28,"deemed":0,"colleges":[{"n":"ESI MEDICAL COLLEGE, SANATHNAGAR, HYD","c":"Hyderabad","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GANDHI MEDICAL COLLEGE, SECUNDERABAD","c":"Secunderabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, BHADRADRI KOTHAGUDEM","c":"Bhadrachalam","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, GADWAL","c":"Gadwal","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, JAGITYAL","c":"Jagityal","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, JANGAON","c":"Jangaon","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, JAYASHANKAR BHUPALPALLY","c":"Bhupalpally","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, KAMAREDDY","c":"Kamareddy","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, KARIMNAGAR","c":"Karimnagar","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, KHAMMAM","c":"Khammam","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, KODANGAL","c":"Kodangal","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, KUMURAM BHEEM ASIFABAD","c":"Asifabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MAHABUBABAD","c":"Mahabubabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MAHABUBNAGAR","c":"Mahabubnagar","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MAHESHWARAM","c":"Maheshwaram","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MANCHERIAL","c":"Mancherial","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MEDAK","c":"Medak","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, MULUGU","c":"Mulugu","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NAGARKURNOOL","c":"Nagarkurnool","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NALGONDA","c":"Nalgonda","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NARAYANPET","c":"Narayanpet","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NARSAMPET","c":"Narsampet","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NIRMAL","c":"Nirmal","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, NIZAMABAD","c":"Nizamabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, QUTHBULLAPUR","c":"Quthbullapur","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, RAJANNA SIRCILLA","c":"Sircilla","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, SANGAREDDY","c":"Sangareddy","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, SIDDIPET","c":"Siddipet","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, SURYAPET","c":"Suryapet","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, VIKARABAD","c":"Vikarabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, WANAPARTHY","c":"Wanaparthy","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"GOVT MEDICAL COLLEGE, YADADRI BHUVANAGIRI","c":"Yadadri Bhuvanagiri","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"KAKATIYA MEDICAL COLLEGE, WARANGAL","c":"Warangal","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"OSMANIA MEDICAL COLLEGE, HYDERABAD","c":"Hyderabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"RAJIV INSTITUTE OF MEDICAL SCIENCE, ADILABAD","c":"Adilabad","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"SINGARENI INSTITUTE OF MEDICAL SCEINCES, RAMAGUNDAM","c":"Ramagundam","t":"govt","gf":"₹10,000","mf":"₹10,000","rf":"—"},{"n":"APOLLO INSTITUTE OF MEDICAL SCIENCES AND RESEARCH, HYD","c":"Hyderabad","t":"private","gf":"₹60,000","mf":"₹13.0L","rf":"—"},{"n":"ARUNDATHI INSTITUTE OF MEDICAL SCIENCES, DUNDIGAL","c":"Dundigal","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"AYAAN INSTITUTE OF MEDICAL SCIENCES","c":"","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"BHASKAR MEDICAL COLLEGE, MOINABAD, RR","c":"Moinabad","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"C ANANDA RAO IINSTITUTE OF MEDICAL SCIENCES, KARIMNAGAR","c":"Karimnagar","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"C ANANDA RAO INSTITUTE OF MEDICAL SCIENCES, KARIMNAGAR","c":"Karimnagar","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"CMR INSTITUTE OF MEDICAL SCIENCES, KANDALKOYA, MEDCHAL","c":"Kandlakoya","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"DECCAN COLLEGE OF MEDICAL SCIENCES","c":"Hyderabad","t":"private","gf":"₹60,000","mf":"₹13.9L","rf":"—"},{"n":"DR PATNAM MAHENDER REDDY INST OF MED SCI, CHEVELLA","c":"Chevella","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"DR V R K WOMENS MEDICAL COLLEGE","c":"Aziznagar","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"FATHER COLOMBO INSTITUTE OF MEDICAL SCIENCES, WARANGAL","c":"Warangal","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"KAMINENI ACADEMY OF MEDICAL SCI AND RESEARCH, HYD","c":"Hyderabad","t":"private","gf":"₹60,000","mf":"₹13.0L","rf":"—"},{"n":"KAMINENI INSTITUTE OF MEDICAL SCIENCES., NARKETPALLY","c":"Narketpally","t":"private","gf":"₹60,000","mf":"₹13.0L","rf":"—"},{"n":"MAHAVIR INSTITUTE OF MEDICAL SCIENCES, VIKARABAD","c":"Vikarabad","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"MAHESHWARA MEDICAL COLLEGE, PATANCHERU, MEDAK","c":"Patancheru","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"MAMATA ACADEMY OF MED SCI, BACHUPALLY","c":"Bachupally","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"MAMATA MEDICAL COLLEGE, KHAMMAM","c":"Khammam","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"MEDICITY INSTITUTE OF MEDICAL SCIENCES","c":"Ghanpur","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"MNR MEDICAL COLLEGE, SANGAREDDY","c":"Sangareddy","t":"private","gf":"₹60,000","mf":"₹13.0L","rf":"—"},{"n":"NEELIMA INSTITUTE OF MEDICAL SCIENCES, GHATKESAR","c":"Ghatkesar","t":"private","gf":"₹60,000","mf":"₹15.0L","rf":"—"},{"n":"NOVA INSTITUTE OF MEDICAL SCIECNES, HAYATHNAGAR, RR","c":"Hayathnagar","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"PRATHIMA INSTITUTE OF MEDICAL SCIENCES, KARIMNAGAR","c":"Karimnagar","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"PRATIMA RELIEF INSTITUTE OF MEDICAL SCIENCES, WARANGAL","c":"Warangal","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"RVM MEDICAL COLLEGE, MULUGU","c":"Mulugu","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"S.V.S. MEDICAL COLLEGE, MAHABUBNAGAR","c":"Mahabubnagar","t":"private","gf":"₹60,000","mf":"₹12.5L","rf":"—"},{"n":"SHADAN INSTITUTE OF MEDICAL SCIENCES","c":"Hyderabad","t":"private","gf":"₹60,000","mf":"₹12.0L","rf":"—"},{"n":"SURABHI INSTITUTE OF MEDICAL SCIENCES, SIDDIPET","c":"Siddipet","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"},{"n":"TRR INSTITUTE OF MEDICAL SCIENCES, INOLE, PATANCHERU","c":"Inole (Patancheru)","t":"private","gf":"₹60,000","mf":"₹11.6L","rf":"—"}]},{"state":"Uttar Pradesh","total":74,"govt":34,"pvt":40,"deemed":0,"colleges":[{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, AMETHI","c":"AMETHI","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, AURAIYA","c":"AURAIYA","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, AYODHYA","c":"AYODHYA","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, BIJNOR","c":"BIJNOR","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, BULANDSHAHR","c":"BULANDSHAHR","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, CHANDAULI","c":"CHANDAULI","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, GONDA","c":"GONDA","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, KANPUR DEHAT","c":"KANPUR DEHAT","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, KAUSHAMBI","c":"KAUSHAMBI","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, KUSHINAGAR","c":"KUSHINAGAR","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, LAKHIMPUR KHIRI","c":"LAKHIMPUR KHIRI","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, LALITPUR","c":"LALITPUR","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, PILIBHIT","c":"PILIBHIT","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, SONBHADRA","c":"SONBHADRA","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"AUTONOMOUS STATE MEDICAL COLLEGE, SULTANPUR","c":"SULTANPUR","t":"govt","gf":"₹1.1L","mf":"₹1.1L","rf":"—"},{"n":"BABA RAGHAVDAS MEDICAL COLLEGE, GORAKHPUR","c":"GORAKHPUR","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"DR.RAM MANOHAR LOHIA INSTITUTE OF MEDICAL SCIENCES, GOMTI NAGAR, LUCKNOW.","c":"LUCKNOW","t":"govt","gf":"₹40,000","mf":"₹40,000","rf":"—"},{"n":"ESIC MEDICAL COLLEGE AND HOSPITAL, NOIDA","c":"NOIDA","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"ESIC MEDICAL COLLEGE AND HOSPITAL, VARANASI","c":"Varanasi","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"GANESH SHANKER VIDHARTHI MEMORIAL MEDICAL COLLEGE, KANPUR","c":"KANPUR","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT INSTITUTE OF MEDICAL SCIENCES, GREATER NOIDA","c":"GREATER NOIDA","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, AMBEDKAR NAGAR","c":"AMBEDKAR NAGAR","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, AZAMGARH","c":"AZAMGARH","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, BADAUN","c":"BADAUN","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, BANDA","c":"BANDA","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, JALAUN","c":"JALAUN","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, KANNAUJ","c":"KANNAUJ","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"GOVERNMENT MEDICAL COLLEGE, SAHARANPUR","c":"SAHARANPUR","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"KING GEORGE MEDICAL UNIVERSITY, LUCKNOW","c":"LUCKNOW","t":"govt","gf":"₹54,900","mf":"₹54,900","rf":"—"},{"n":"LALA LAJPAT RAI MEMORIAL MEDICAL COLLEGE, MEERUT","c":"MEERUT","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"MAHARANI LAXMIBAI MEDICAL COLLEGE, JHANSI","c":"JHANSI","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"MOTI LAL NEHRU MEDICAL COLLEGE, PRAGYRAJ","c":"PRAGYRAJ","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"SAROJINI NAIDU MEDICAL COLLEGE, AGRA","c":"AGRA","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"UTTAR PRADESH UNIVERSITY OF MEDICAL SCIENCES, SAIFAI, ETAWAH.","c":"ETAWAH.","t":"govt","gf":"₹36,000","mf":"₹36,000","rf":"—"},{"n":"AJAY SANGAAL INSTITUTE OF MEDICAL SCIENCE & RESEARCH & AYUSHMAAN HOSPITAL, SHAMLI [ PPP]","c":"SHAMLI","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"CAREER INSTITUTE OF MEDICAL SCIENCES & HOSPITAL, LUCKNOW","c":"LUCKNOW","t":"private","gf":"₹16.5L","mf":"₹16.5L","rf":"—"},{"n":"DR. B.S. KUSHWAH INSTITUTE OF MDICAL COLLEGE, KANPUR","c":"KANPUR","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"ERA'S LUCKNOW MEDICAL COLLEGE & HOSPITAL, LUCKNOW","c":"LUCKNOW","t":"private","gf":"₹16.6L","mf":"₹16.6L","rf":"—"},{"n":"F.H. MEDICAL COLLEGE, AGRA","c":"AGRA","t":"private","gf":"₹17.9L","mf":"₹17.9L","rf":"—"},{"n":"G S MEDICAL COLLEGE & HOSPITAL, HAPUR","c":"HAPUR","t":"private","gf":"₹14.4L","mf":"₹14.4L","rf":"—"},{"n":"HERITAGE INSTITUTE OF MEDICAL SCIENCES, VARANASI","c":"VARANASI","t":"private","gf":"₹13.2L","mf":"₹13.2L","rf":"—"},{"n":"HIND INSTITUTE OF MEDICAL SCIENCES, BARABANKI","c":"BARABANKI","t":"private","gf":"₹16.9L","mf":"₹16.9L","rf":"—"},{"n":"HIND INSTITUTE OF MEDICAL SCIENCES, SITAPUR","c":"SITAPUR","t":"private","gf":"₹12.9L","mf":"₹12.9L","rf":"—"},{"n":"INTEGRAL INSTITUTE OF MEDICAL SCIENCES & RESEARCH, LUCKNOW","c":"LUCKNOW","t":"private","gf":"₹18.0L","mf":"₹18.0L","rf":"—"},{"n":"KANTI DEVI MEDICAL COLLEGE, HOSPITAL & RESEARCH CENTRE, MATHURA","c":"MATHURA","t":"private","gf":"₹12.3L","mf":"₹12.3L","rf":"—"},{"n":"KMC MEDICAL COLLEGE & HOSPITAL, MAHARAJGANJ [ PPP]","c":"MAHARAJGANJ","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"KRISHNA MOHAN MEDICAL COLLEGE & HOSPITAL, MATHURA","c":"MATHURA","t":"private","gf":"₹11.7L","mf":"₹11.7L","rf":"—"},{"n":"MAYO INSTITUTE OF MEDICAL SCIENCES, BARABANKI","c":"BARABANKI","t":"private","gf":"₹11.2L","mf":"₹11.2L","rf":"—"},{"n":"MUZAFFARNAGAR MEDICAL COLLEGE, MUZAFFARNAGAR","c":"MUZAFFARNAGAR","t":"private","gf":"₹16.7L","mf":"₹16.7L","rf":"—"},{"n":"NARAINA MEDICAL COLLEGE & RESEARCH CENTER, KANPUR","c":"KANPUR","t":"private","gf":"₹12.1L","mf":"₹12.1L","rf":"—"},{"n":"NATIONAL CAPITAL REGION INSTITUTE OF MEDICAL SCIENCES, MEERUT","c":"MEERUT","t":"private","gf":"₹12.2L","mf":"₹12.2L","rf":"—"},{"n":"NOIDA INTERNATIONAL INSTITUTE OF MEDICAL SCIENCES, GREATER NOIDA","c":"GREATER NOIDA","t":"private","gf":"₹17.2L","mf":"₹17.2L","rf":"—"},{"n":"PRASAD INSTITUTE OF MEDICAL SCIENCES, LUCKNOW","c":"LUCKNOW","t":"private","gf":"₹11.0L","mf":"₹11.0L","rf":"—"},{"n":"RAJSHREE MEDICAL RESEARCH INSTITUTE, BAREILLY","c":"BAREILLY","t":"private","gf":"₹17.7L","mf":"₹17.7L","rf":"—"},{"n":"RAMA MEDICAL COLLEGE HOSPITAL, & RESEARCH CENTRE, HAPUR","c":"HAPUR","t":"private","gf":"₹13.1L","mf":"₹13.1L","rf":"—"},{"n":"RAMA MEDICAL COLLEGE HOSPITAL, & RESEARCH CENTRE, KANPUR","c":"KANPUR","t":"private","gf":"₹15.2L","mf":"₹15.2L","rf":"—"},{"n":"ROHILKHAND MEDICAL COLLEGE & HOSPITAL, BAREILLY","c":"BAREILLY","t":"private","gf":"₹18.7L","mf":"₹18.7L","rf":"—"},{"n":"SARASWATI INSTITUTE OF MEDICAL SCIENCES, HAPUR","c":"HAPUR","t":"private","gf":"₹11.8L","mf":"₹11.8L","rf":"—"},{"n":"SARASWATI MEDICAL COLLEGE, UNNAO","c":"UNNAO","t":"private","gf":"₹11.6L","mf":"₹11.6L","rf":"—"},{"n":"SCHOOL OF MEDICAL SCIENCES & RESEARCH AND SHARDA HOSPITAL, GREATER NOIDA","c":"GREATER NOIDA","t":"private","gf":"₹15.2L","mf":"₹15.2L","rf":"—"},{"n":"SHRI GORAKSHNATH MEDICAL COLLEGE HOSPITAL & RESEARCH CENTER, SONBARSA, GORAKHPUR","c":"GORAKHPUR","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"SHRI SIDDHI VINAYAK MEDICAL COLLEGE & HOSPITAL, SAMBHAL [ PPP]","c":"SAMBHAL","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"SKS HOSPITAL MEDICAL COLLEGE & RESEARCH CENTER, MATHURA","c":"MATHURA","t":"private","gf":"₹12.1L","mf":"₹12.1L","rf":"—"},{"n":"SRI RAMMURTI SMARAK INSTITUTE OF MEDICAL SCIENCES, BAREILLY","c":"BAREILLY","t":"private","gf":"₹19.8L","mf":"₹19.8L","rf":"—"},{"n":"SUBHARTI MEDICAL COLLEGE, MEERUT","c":"MEERUT","t":"private","gf":"₹14.2L","mf":"₹14.2L","rf":"—"},{"n":"T.S.MISRA MEDICAL COLLEGE & HOSPITAL,  LUCKNOW","c":"LUCKNOW","t":"private","gf":"₹14.1L","mf":"₹14.1L","rf":"—"},{"n":"TEERTHANKAR MAHAVEER MEDICAL COLLEGE & RESEARCH CENTRE, MORADABAD","c":"MORADABAD","t":"private","gf":"₹16.2L","mf":"₹16.2L","rf":"—"},{"n":"UNITED INSTITUTE OF MEDICAL SCIENCES, PRAYAGRAJ","c":"PRAYAGRAJ","t":"private","gf":"₹11.9L","mf":"₹11.9L","rf":"—"},{"n":"VARUNARJUN MEDICAL COLLEGE & ROHILKHAND HOSPITAL , SHAHJAHANPUR","c":"SHAHJAHANPUR","t":"private","gf":"₹14.5L","mf":"₹14.5L","rf":"—"},{"n":"VENKATESWARA INSTITUTE OF MEDICAL SCIENCES, GAJRAULA, AMROAHA","c":"AMROAHA","t":"private","gf":"₹11.1L","mf":"₹11.1L","rf":"—"},{"n":"CAREER INSTITUTE OF MEDICAL SCIENCES, LUCKNOW (MUSLIM MINORITY)","c":"LUCKNOW","t":"minority","gf":"₹16.5L","mf":"₹16.5L","rf":"—"},{"n":"F.H. MEDICAL COLLEGE, AGRA (MUSLIM MINORITY)","c":"AGRA","t":"minority","gf":"₹17.9L","mf":"₹17.9L","rf":"—"},{"n":"INTEGRAL INSTITUTE OF MEDICAL SCIENCES & & RESEARCH, LUCKNOW (MUSLIM MINORITY)","c":"LUCKNOW","t":"minority","gf":"₹18.0L","mf":"₹18.0L","rf":"—"},{"n":"TEERTHANKAR MAHAVEER MEDICAL COLLEGE & RESEARCH CENTRE, MORADABAD (JAIN MINORITY)","c":"MORADABAD","t":"minority","gf":"₹16.2L","mf":"₹16.2L","rf":"—"}]},{"state":"West Bengal","total":41,"govt":25,"pvt":16,"deemed":0,"colleges":[{"n":"BANKURA SAMMILANI MEDICAL COLLEGE, BANKURA","c":"Bankura","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"BARASAT Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Barasat","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"BURDWAN MEDICAL COLLEGE, BURDWAN","c":"Burdwan","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"CALCUTTA NATIONAL MEDICAL COLLEGE, KOLKATA","c":"Kolkata","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"COLLEGE OF MEDICINE AND JNM HOSPITAL, KALYANI","c":"Kalyani","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"COLLEGE OF MEDICINE AND SAGORE DUTTA HOSPITAL, KAMARHATI","c":"Kamarhati","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"DEBEN MAHATA Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Purulia","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"DIAMOND HARBOUR GOVT MEDICAL COLLEGE AND HOSPITAL","c":"Diamond Harbour","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"ESI PGI MSR AND ESIC MEDICAL COLLEGE JOKA KOLKATA","c":"Kolkata","t":"govt","gf":"₹1.0L","mf":"₹1.0L","rf":"—"},{"n":"INSTITUTE OF PG MEDICAL EDUCATION AND RESEARCH, KOLKATA","c":"Kolkata","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"JALPAIGURI Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Jalpaiguri","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"JHARGRAM Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Jhargram","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"MAHARAJA JITENDRA NARAYAN MEDICAL COLLEGE AND HOSPITAL, COOCHBEHAR","c":"Cooch Behar","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"MALDA MEDICAL COLLEGE AND HOSPITAL, MALDA","c":"Malda","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"MEDICAL COLLEGE, KOLKATA","c":"Kolkata","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"MIDNAPORE MEDICAL COLLEGE, MIDNAPUR","c":"Midnapore","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"MURSHIDABAD MEDICAL COLLEGE AND HOSPITAL, MURSHIDABAD","c":"Murshidabad","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"NILRATAN SIRCAR MEDICAL COLLEGE, KOLKATA","c":"Kolkata","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"NORTH BENGAL MEDICAL COLLEGE AND HOSPITAL, DARJEELING","c":"Darjeeling","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"PRAFULLA CHANDRA SEN Government Aided MEDICAL COLLEGE","c":"Hooghly","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"R.G. KAR MEDICAL COLLEGE, KOLKATA","c":"Kolkata","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"RAIGANJ GOVT MEDICAL COLLEGE AND HOSPITAL","c":"Raiganj","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"RAMPURHAT GOVT MEDICAL COLLEGE AND HOSPITAL","c":"Rampurhat","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"SARAT CHANDRA CHATTOPADHYAY Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Uluberia","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"TAMRALIPTO Government Aided MEDICAL COLLEGE AND HOSPITAL","c":"Tamluk","t":"govt","gf":"₹7,000","mf":"₹7,000","rf":"—"},{"n":"EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH","c":"Durgapur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL","c":"Durgapur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"I Q CITY MEDICAL COLLEGE","c":"Durgapur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA","c":"Haldia","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE","c":"Jangipur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"JMN MEDICAL COLLEGE","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED","c":"Krishnanagar","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"KUSUM DEVI SUNDERLAL DUGAR JAIN DENTAL COLLEGE AND HOSPITAL","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"PKG MEDICAL COLLEGE & HOSPITAL","c":"Kolkata","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"RANIGANJ INSTITUTE OF MEDICAL SCIENCE","c":"Asansol","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"SANTINIKETAN MEDICAL COLLEGE","c":"Bolpur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"},{"n":"SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS","c":"Durgapur","t":"private","gf":"₹4.5L","mf":"₹9.0L","rf":"—"}]},{"state":"Deemed Universities (National)","total":55,"govt":0,"pvt":0,"deemed":55,"colleges":[{"n":"ACS Medical College and Hospital","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹23.0L","mf":"₹23.0L","rf":"—"},{"n":"Aarupadai Veedu Medical College and Hospt.","c":"Puducherry, Puducherry","t":"deemed","gf":"₹21.0L","mf":"₹21.0L","rf":"—"},{"n":"Amrita Institute of Medical Science","c":"Kochi, Kerala","t":"deemed","gf":"₹25.0L","mf":"₹25.0L","rf":"—"},{"n":"Amrita School of Medicine Faridabad","c":"Haryana","t":"deemed","gf":"₹25.0L","mf":"₹25.0L","rf":"—"},{"n":"B.L.D.E University","c":"Bijapur, Karnataka","t":"deemed","gf":"₹19.0L","mf":"₹19.0L","rf":"—"},{"n":"BHAARATH MEDICAL COLLEGE AND HOSPITAL","c":"Tamil Nadu","t":"deemed","gf":"₹25.0L","mf":"₹25.0L","rf":"—"},{"n":"BV Deemed Uni. Med. College and Hos.","c":"Sangli, Maharashtra","t":"deemed","gf":"₹22.1L","mf":"₹22.1L","rf":"—"},{"n":"Bharati Vidyapeeth DU Medical College","c":"Dhankawadi, Maharashtra","t":"deemed","gf":"₹23.6L","mf":"₹23.6L","rf":"—"},{"n":"Chettinad Hos. and Res. Inst.","c":"Tamil Nadu","t":"deemed","gf":"₹24.5L","mf":"₹24.5L","rf":"—"},{"n":"DATTA MEGHE MEDICAL COLLEGE WANADONGRI HINGNA NAGPUR","c":"Nagpur","t":"deemed","gf":"₹21.5L","mf":"₹21.5L","rf":"—"},{"n":"DY Patil University School of Medicine","c":"Maharashtra","t":"deemed","gf":"₹27.0L","mf":"₹27.0L","rf":"—"},{"n":"Dr. DY Patil Medical College","c":"Navi Mumbai, Maharashtra","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Dr. DY Patil Medical College and Hospt.","c":"Pune, Maharashtra","t":"deemed","gf":"₹27.0L","mf":"₹27.0L","rf":"—"},{"n":"Dr. DYP Edu. Soc. Deemed Uni.","c":"Kolhapur, Maharashtra","t":"deemed","gf":"₹23.1L","mf":"₹23.1L","rf":"—"},{"n":"GITAM Institue of Med. Sce. and Res.","c":"Visakhapatnam, Andhra Pradesh","t":"deemed","gf":"₹25.4L","mf":"₹25.4L","rf":"—"},{"n":"Graphic Era Institute Of Medical Science","c":"Dehradun Uttarakhand","t":"deemed","gf":"₹22.0L","mf":"₹22.0L","rf":"—"},{"n":"Institute of Medical Sciences & SUM Hospital","c":"Odisha","t":"deemed","gf":"₹21.9L","mf":"₹21.9L","rf":"—"},{"n":"Institute of Medical Sciences and SUM Host.","c":"Bhubaneswar, Odisha","t":"deemed","gf":"₹17.9L","mf":"₹17.9L","rf":"—"},{"n":"J R MEDICAL COLLEGE AND HOSPITAL","c":"Tamil Nadu, Tamil Nadu","t":"deemed","gf":"₹18.0L","mf":"₹18.0L","rf":"—"},{"n":"JLN Medical College","c":"Maharashtra","t":"deemed","gf":"₹22.0L","mf":"₹22.0L","rf":"—"},{"n":"JSS Medical College","c":"Mysuru, Karnataka","t":"deemed","gf":"₹21.9L","mf":"₹21.9L","rf":"—"},{"n":"Jagadguru Gangadhar Mahaswamigalu Moorusavirmath Medical College","c":"Hubballi, Karnataka","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Jawahar Lal Nehru Medical College","c":"Belagavi, Karnataka","t":"deemed","gf":"₹22.0L","mf":"₹22.0L","rf":"—"},{"n":"K.S Hegde Medical Academy","c":"Mangaluru, Karnataka","t":"deemed","gf":"₹17.8L","mf":"₹17.8L","rf":"—"},{"n":"Kalinga Institute of Medical Sciences","c":"Bhubaneswar, Odisha","t":"deemed","gf":"₹18.5L","mf":"₹18.5L","rf":"—"},{"n":"Kasturba Medical College","c":"Karnataka","t":"deemed","gf":"₹17.8L","mf":"₹17.8L","rf":"—"},{"n":"Krishna Inst. of Med. Scie.","c":"Karad, Maharashtra","t":"deemed","gf":"₹23.0L","mf":"₹23.0L","rf":"—"},{"n":"MGM Medical College","c":"Aurangabad, Maharashtra","t":"deemed","gf":"₹23.5L","mf":"₹23.5L","rf":"—"},{"n":"MM Inst. Med. and Research","c":"Mullana, Haryana","t":"deemed","gf":"₹18.0L","mf":"₹18.0L","rf":"—"},{"n":"Mahatma Gandhi Medical College","c":"Pondicherry, Puducherry","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Mahatma Gandhi Mission Medical College","c":"Nerul, Maharashtra","t":"deemed","gf":"₹23.5L","mf":"₹23.5L","rf":"—"},{"n":"Mahatma Gandhi Missions Medical College","c":"Panvel, Maharashtra","t":"deemed","gf":"₹23.5L","mf":"₹23.5L","rf":"—"},{"n":"Malla Reddy Institute of Medical Sciences","c":"Hyderabad, Telangana","t":"deemed","gf":"₹19.0L","mf":"₹19.0L","rf":"—"},{"n":"Malla Reddy Medical College for Women","c":"Hyderabad, Telangana","t":"deemed","gf":"₹19.0L","mf":"₹19.0L","rf":"—"},{"n":"Manipal Tata Medical College","c":"Jharkhand","t":"deemed","gf":"₹16.1L","mf":"₹16.1L","rf":"—"},{"n":"Meenakshi Medical College Hospital and Research Institute","c":"Kanchipuram, Tamil Nadu","t":"deemed","gf":"₹19.5L","mf":"₹19.5L","rf":"—"},{"n":"Raja Rajeswari Medical College Bengaluru","c":"Karnataka","t":"deemed","gf":"₹23.5L","mf":"₹23.5L","rf":"—"},{"n":"Rural Medical College and PIMS","c":"Loni, Maharashtra","t":"deemed","gf":"₹19.0L","mf":"₹19.0L","rf":"—"},{"n":"SBKS Med. Inst. and Res. Centre","c":"Gujarat","t":"deemed","gf":"₹18.8L","mf":"₹18.8L","rf":"—"},{"n":"SDU Medical College","c":"Kolar, Karnataka","t":"deemed","gf":"₹19.4L","mf":"₹19.4L","rf":"—"},{"n":"SRI LALITHAMBIGAI MEDICAL COLLEGE & HOSPITAL","c":"Chennai","t":"deemed","gf":"₹19.0L","mf":"₹19.0L","rf":"—"},{"n":"SRM Medical College and Hospital","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹28.0L","mf":"₹28.0L","rf":"—"},{"n":"SYMBIOSIS MEDICAL COLLEGE FOR WOMEN PUNE","c":"Pune, Maharashtra","t":"deemed","gf":"₹10.0L","mf":"₹10.0L","rf":"—"},{"n":"Santosh Medical College and Hospital","c":"Ghaziabad, Uttar Pradesh","t":"deemed","gf":"₹24.0L","mf":"₹24.0L","rf":"—"},{"n":"Saveetha Medical College","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹25.0L","mf":"₹25.0L","rf":"—"},{"n":"Shri Sathya Sai Medical College and Research Institute","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Sree Balaji Medical College and Hospital","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹27.5L","mf":"₹27.5L","rf":"—"},{"n":"Sri Lakshmi Narayana Inst. of Med. Scien.","c":"Puducherry, Puducherry","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Sri Ramachandra Med. College and Res. Inst.","c":"Chennai, Tamil Nadu","t":"deemed","gf":"₹30.0L","mf":"₹30.0L","rf":"—"},{"n":"Sri Siddhartha Academy T Begur","c":"Karnataka","t":"deemed","gf":"₹18.8L","mf":"₹18.8L","rf":"—"},{"n":"Sri Siddhartha Medical College DU","c":"Tumkur, Karnataka","t":"deemed","gf":"₹17.8L","mf":"₹17.8L","rf":"—"},{"n":"VELS MEDICAL COLLEGE & HOSPITAL","c":"Tamil Nadu","t":"deemed","gf":"₹21.0L","mf":"₹21.0L","rf":"—"},{"n":"VMKV Medical College and Hospital","c":"Salem, Tamil Nadu","t":"deemed","gf":"₹15.0L","mf":"₹15.0L","rf":"—"},{"n":"Vinayaka Missions Medical College and Hospital","c":"Karaikal, Puducherry","t":"deemed","gf":"₹19.5L","mf":"₹19.5L","rf":"—"},{"n":"Yenepoya Medical College","c":"Mangalore, Karnataka","t":"deemed","gf":"₹23.0L","mf":"₹23.0L","rf":"—"}]}];
+</script>
+<script src="js/admin-app.js"></script>
+</body>
+</html>
